@@ -5,6 +5,9 @@ let suivants x =
   [{value = x.value+1}; {value = 2*x.value}] ;;
 let final x = 
   x.value = 42 ;;
+
+let h e = 
+  1 + e
 let bfs () =
   let rec dissimulatewhile a b p=
     match a with
@@ -33,3 +36,31 @@ let ids () =
       m := !m + 1;
     done;
 !m ;;
+
+let min = ref 0 ;;
+
+let rec dfsstar m e p =
+  let c = p + (h e.value) in
+  if c > m then 
+    ((if c < !min then min := c) ; false) 
+    else if (final e) then true else
+      let flag = ref false in
+      let voisins = ref (suivants e) in
+      while (!voisins <> []) && (!flag = false) do
+        flag := dfsstar m (List.hd !voisins) (p+1);
+        voisins := List.tl !voisins
+      done;
+  !flag ;;
+
+let idastar () = 
+  let m = ref (h initial.value) in
+  let flag = ref false in
+  let m_final = ref !m in
+  while !m <> max_int && not !flag do 
+    begin
+      min := max_int ;
+      if dfsstar !m initial 0 then (flag := true ; m_final := !m);
+      m := !min;
+    end
+  done;
+  !m_final ;;
