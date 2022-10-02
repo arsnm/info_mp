@@ -1,6 +1,12 @@
-# DM1 - Informatique Option
-
->Arsène MALLET - MP*
+---
+title : DM1 - Informatique Option
+subtitle: Arsène MALLET - MP*
+toc: true
+toc-title: Sommaire
+toc-depth: 2
+header-includes:
+  - \usepackage{stmaryrd}
+---
 
 ## Question 1
 
@@ -8,32 +14,32 @@ Une solution optimale pour $F = \{42\}$ est $\{1, 2, 4, 5, 10, 20, 21, 42\}$. Ce
 
 ## Question 2
 
-On suppose $s \in \mathbb{N^*} \cup \{+\infty\}$ (la cas où $s=0$ étant triviale) la profondeur de la solution optimale (en notant $s = + \infty$ si il n'y a pas de solution au jeu). Afin de montrer l'équivalence, il faut montrer qu'à chaque $p$-ième tour de boucle `tant que` , $A$ contient tous les états de profondeur $p$ (où $p \lt s \in \mathbb{N}$). Montrons le par récurrence : \
-**Initialisation** : Si $p = 0$ alors $A = \{e_0\}$, et donc contient bien l'unique état de profondeur $0$. L'initialisation est vérifiée. \
+On suppose $s \in \mathbb{N^*} \cup \{+\infty\}$ (la cas où $s=0$ étant triviale) la profondeur de la solution optimale (en notant $s = + \infty$ si il n'y a pas de solution au jeu). Afin de montrer l'équivalence, il faut montrer qu'à chaque $p$-ième tour de boucle `tant que` , $A$ contient tous les états de profondeur $p$ (où $p < s \in \mathbb{N}$). Montrons le par récurrence :  
+**Initialisation** : Si $p = 0$ alors $A = \{e_0\}$, et donc contient bien l'unique état de profondeur $0$. L'initialisation est vérifiée. 
 **Hérédité** : Soit $p \in \mathbb{N}$, on suppose que A contienne tous les états de profondeur $p$ en entrant dans le $p$-ième tour de la boucle `tant que`, montrons que A contient tous les états de profondeur $p+1$ en entrant dans le ($p+1$)-ième tour de la boucle `tant que`.
 
-Comme $p \lt s$, $A \cap F = \varnothing$. Ainsi, grâce à la boucle `pour tout`, $B=\{s(x)\mid x\in A\}$, or comme $A$ contient tous les états de profondeurs $p$, alors $B$ contient tout les états de profondeur $p+1$. Comme en fin de bouble `tant que`, $A \leftarrow B$, en entrant dans le ($p+1$)-ième tour de la boucle `tant que`, $A$ contient tous les états de profondeur $p+1$
+Comme $p < s$, $A \cap F = \varnothing$. Ainsi, grâce à la boucle `pour tout`, $B=\{s(x)\mid x\in A\}$, or comme $A$ contient tous les états de profondeurs $p$, alors $B$ contient tout les états de profondeur $p+1$. Comme en fin de bouble `tant que`, $A \leftarrow B$, en entrant dans le ($p+1$)-ième tour de la boucle `tant que`, $A$ contient tous les états de profondeur $p+1$
 
-**Conclusion** : à chaque $p$-ième tour de boucle `tant que` , $A$ contient tous les états de profondeur $p$ (où $p \lt s \in \mathbb{N}$)
+**Conclusion** : à chaque $p$-ième tour de boucle `tant que` , $A$ contient tous les états de profondeur $p$ (où $p < s \in \mathbb{N}$)
 
 Ainsi, le parcours en largeur renvoie `VRAI` si et seulement si il existe une profondeur $p' \in \mathbb{N}$ tel que $A_{p'} \cap F \neq \varnothing$ , si et seulement si il existe une solution.
 
 ## Question 3
 
-Soit $p \in \mathbb{N}$, la profondeur de la solution trouvée. \
-On considère le nombre d'états total que l'on ajoute à $A$ au cours des itérations de boucle comme étant l'ordre de la compléxité temporelle (puisque le nombre d'opérations élémentaires dépend de ce nombre total d'états). \
-Ainsi on ajoute enfaite à $A$ tous les états atteignables depuis $e_0$. En considérant les potentiels doublons, et sachant qu'à chaque état de profondeur $i \lt p \in \mathbb{N}$, il y a deux choix d'états de profondeur $i+1$ alors le nombre total d'états ajouté à $A$ est majorée par:
+Soit $p \in \mathbb{N}$, la profondeur de la solution trouvée.  
+On considère le nombre d'états total que l'on ajoute à $A$ au cours des itérations de boucle comme étant l'ordre de la compléxité temporelle (puisque le nombre d'opérations élémentaires dépend de ce nombre total d'états).  
+Ainsi on ajoute enfaite à $A$ tous les états atteignables depuis $e_0$. En considérant les potentiels doublons, et sachant qu'à chaque état de profondeur $i < p \in \mathbb{N}$, il y a deux choix d'états de profondeur $i+1$ alors le nombre total d'états ajouté à $A$ est majorée par:
 $$
 \begin{aligned}
 \sum_{i=0}^p(2^i)& = 2^{p+1}-1 \\
-                 &  \lt  2^{p+1}  \\
+                 &  <  2^{p+1}  \\
 \end{aligned}$$
 
 Ainsi la complexité temporrelle est majorée par $2^{p+1}$
 
 On cherche maintenant un minorant du nombre d'états ajouté à $A$. Pour cela on peut montrer que pour tout $i \in \mathbb{N}$, on ajoute tout les entiers entre $1$ et $2^i$ en $2i$ itérations de boucles :\
 Soit i $\in \mathbb{N}$ et $n \in \llbracket 1,2^i \rrbracket$. On note $\underline{b_kb_{k-1}...b_0}_2$ où $k \leq i,  b_k = 1$ et $\forall l \in \llbracket 0,k-1 \rrbracket, b_l \in \{0,1\}$ la représentation binaire de $n$
-Ainsi $ n = \sum_{l=0}^{k}(b_l2^l) = b_0 + 2(b_1 + 2(... + 2b_k)$. Ainsi, comme $\forall l \in \llbracket 0,k-1 \rrbracket, b_l \in \{0,1\}$, $n$ est atteignable en maximum $2k$ étapes (en partant de la dernière parenthèse, on multiplie par deux et/ou on ajoute 1 au fur et à mesure). Ainsi en $p$ itérations de boucle, on ajoute au minimum l'ensemble $\llbracket 1,2^{\lfloor p/2 \rfloor} \rrbracket$ à $A$, d'où le minorant. Ainsi la complexité temporelle est bornée à la fois inférieurement et supérieurement par deux fonctions exponentielles en $p$.
+Ainsi, $$ n = \sum_{l=0}^{k}(b_l2^l) = b_0 + 2(b_1 + 2(... + 2b_k)$$ et, comme $\forall l \in \llbracket 0,k-1 \rrbracket, b_l \in \{0,1\}$, $n$ est atteignable en maximum $2k$ étapes (en partant de la dernière parenthèse, on multiplie par deux et/ou on ajoute 1 au fur et à mesure). Ainsi en $p$ itérations de boucle, on ajoute au minimum l'ensemble $\llbracket 1,2^{\lfloor p/2 \rfloor} \rrbracket$ à $A$, d'où le minorant. Ainsi la complexité temporelle est bornée à la fois inférieurement et supérieurement par deux fonctions exponentielles en $p$.
 
 La complexité spatialle est de l'ordre du cardinal maximal de A au cours des itérations, qui est majoré par le nombre d'états de profondeur p, lui-même majoré par $2^p$ (séquence de $p$ éléments et $2$ choix par états). De plus, comme on ajoute au moins $2^{\lfloor p/2 \rfloor}$ éléments à $A$ en $p$ étapes (cf. compléxité temporelle), il y a au moins une itération de boucle où $Card(A) \geq \frac{2^{\lfloor p/2 \rfloor}}{p}$ éléments. Ainsi la complexité spatialle est également bornée à la fois inférieurement et supérieurement par deux fonctions exponentielles en $p$.
 
@@ -115,13 +121,28 @@ let idastar () =
       m := !min;
     end
   done;
-  !m_final ;;
+  !m_final - 1 ;;
   ```
 
 ## Question 11
 
 En prenant:
-$$\begin{array}{ccccc}
+$$ \begin{array}{ccccc}
 h & : & E & \to & \mathbb{N} \\
- & & x & \mapsto & \lfloor log_2(t-x) \rfloor \\
-\end{array}$$
+ & & x & \mapsto & \begin{cases}
+      0, & \text{si } n=t \\
+      1, & \text{sinon}
+    \end{cases} \\
+ \end{array} 
+$$
+On peut montrer que $h$ est bien admissible :  
+Soit $e \in E$ un état quelconque. Si $e = t$ alors $e \in F$ et donc l'état est solution. Ainsi $h(e) = 0$. Sinon, il reste au moins une étape avant d'atteindre un état solution donc la distance de $e$ à $t$ est supérieur ou égale à 1, or $h(e) \leq 1$ d'où l'admissibilité de $h$.
+
+## Question 12
+
+## Question 13
+Sachant qu'il y a $16$ cases, et que chaque état correspond à un placement des $16$ valeurs disponibles dans chacune des $16$ cases, on peut ainsi conclure qu'il y a $16!$ états possibles. En espace mémoire, peu importe comment on représente un état (Liste, Array, etc...), sotcker de nombreux états parait difficielement envisageable. Sachant qu'en plus un état initial quelconque peu mener à une solution optimale de profondeur de l'ordre de 50 (cf. énoncé)
+
+## Question 14
+
+Afin de montrer que $h$ est admissible, il faut montrer que $h$ ne peut renvoyer un entier supérieur au nombre d'états nécéssaires afin d'obtenir une solution optimale. 

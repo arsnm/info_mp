@@ -7,7 +7,7 @@ let final x =
   x.value = 42 ;;
 
 let h e = 
-  1 + e
+  if final e then 1 else 0
 let bfs () =
   let rec dissimulatewhile a b p=
     match a with
@@ -16,8 +16,6 @@ let bfs () =
           |_ -> dissimulatewhile b [] p+1)
     |h::t -> if final h then p else dissimulatewhile t (List.append (suivants(h)) b) p
 in dissimulatewhile [initial] [] 0 ;;
-
-print_int(bfs ()) ;;
 
 let ids () = 
   let rec dfs m e p = 
@@ -40,7 +38,7 @@ let ids () =
 let min = ref 0 ;;
 
 let rec dfsstar m e p =
-  let c = p + (h e.value) in
+  let c = p + (h e) in
   if c > m then 
     ((if c < !min then min := c) ; false) 
     else if (final e) then true else
@@ -53,7 +51,7 @@ let rec dfsstar m e p =
   !flag ;;
 
 let idastar () = 
-  let m = ref (h initial.value) in
+  let m = ref (h initial) in
   let flag = ref false in
   let m_final = ref !m in
   while !m <> max_int && not !flag do 
@@ -63,4 +61,6 @@ let idastar () =
       m := !min;
     end
   done;
-  !m_final ;;
+  !m_final - 1 ;;
+
+print_int(idastar())
