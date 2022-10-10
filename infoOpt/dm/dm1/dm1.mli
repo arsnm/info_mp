@@ -9,3 +9,5 @@ val grid : int array array
 val h: int ref
 val li : int ref
 val lj : int ref
+type deplacement
+val solution: deplacement list ref

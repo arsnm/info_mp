@@ -6,6 +6,13 @@ toc-title: Sommaire
 toc-depth: 2
 header-includes:
   - \usepackage{stmaryrd}
+  - \usepackage{fancyhdr}
+  - \usepackage{lastpage}
+  - \pagestyle{fancy}
+  - \fancyhf{}
+  - \renewcommand{\headrulewidth}{0pt}
+  - \fancyfoot[R]{\thepage/\pageref{LastPage}}
+geometry: margin=30mm
 ---
 
 ## Question 1
@@ -93,12 +100,20 @@ Comme montrer à la question 6,  `DFS(m,$e_0$,0)` renvoie `VRAI` si et seulement
 
 ## Question 9
 
+1. On suppose qu'il y a exactement un état à chaque profondeur $p$ :
+Comme il n'y a qu'un seul état pour chaque profondeur, pour le parcours en largeur, $Card(B) = 1$ (et $Card(A) = Card(B)$) durant chaque itération de boucle. Si la profondeur optimal est $s \in \mathbb {N}$, alors il y aura $o$ itération(s) de boucle. Ainsi la complexité spatiale est $O(1)$ et la complexité temporelle $O(s)$.
+Pour ce qui est de l’algorithme de recherche itérée en profondeur, la fonction étant récursive, il est nécessaire qu'on stock la pile d'appel, et donc, suivant l'hypothèse, cette file est $O(s)$, d'où la complexité spatiale. En temporelle, l'algorithme cherche les solutions pour toutes les profondeurs $p$ où $p \in \llbracket 1 ; s \rrbracket$. Comme chaque test des solutions de profondeur $p$ est un $O(p)$, alors en sommant, la complexité temporelle de l'algo est $O(s^2)$.
+
+2. On suppose qu'il y a exactement $2^p$ états à la profondeur $p$ :
+L'hypothèse permet d'affirmer que pour chaque itération de boucle, alors pour chaque profondeur $p$, $Card(B) = Card(A) = 2^p$. Donc la complexité temporelle est $O(2^s)$. Temporellement, on explore $\forall p \in \llbracket 1, s \rrbracket, \forall k \in \llbracket 1, p \rrbracket$ les $2^k$ états, soit une complexité en $0(2^s)$.
+Pour le parcours en profondeur itérée, encore une fois la complexité spatiale correspond à la taille de la pile d'appel, qui est dans ce cas également $O(s)$. En temps, on devra $\forall p \in \llbracket 1, s \rrbracket, \forall k \in \llbracket 1, p \rrbracket$ explorer les $2^k$ états, soit encore une complexité en $O(2^s)$.
+
 ## Question 10
 
 ```ocaml
 let min = ref 0 ;;
 
-let rec dfsstar m e p =
+let rec dfs m e p =
   let c = p + (h e.value) in
   if c > m then 
     ((if c < !min then min := c) ; false) 
@@ -106,7 +121,7 @@ let rec dfsstar m e p =
       let flag = ref false in
       let voisins = ref (suivants e) in
       while (!voisins <> []) && (!flag = false) do
-        flag := dfsstar m (List.hd !voisins) (p+1);
+        flag := dfs m (List.hd !voisins) (p+1);
         voisins := List.tl !voisins
       done;
   !flag ;;
@@ -118,7 +133,7 @@ let idastar () =
   while !m <> max_int && not !flag do 
     begin
       min := max_int ;
-      if dfsstar !m initial 0 then (flag := true ; m_final := !m);
+      if dfs !m initial 0 then (flag := true ; m_final := !m);
       m := !min;
     end
   done;
@@ -140,6 +155,7 @@ On peut montrer que $h$ est bien admissible :
 Soit $e \in E$ un état quelconque. Si $e = t$ alors $e \in F$ et donc l'état est solution. Ainsi $h(e) = 0$. Sinon, il reste au moins une étape avant d'atteindre un état solution donc la distance de $e$ à $t$ est supérieur ou égale à 1, or $h(e) \leq 1$ d'où l'admissibilité de $h$.
 
 ## Question 12
+(Non réussie)
 
 ## Question 13
 Sachant qu'il y a $16$ cases, et que chaque état correspond à un placement des $16$ valeurs disponibles dans chacune des $16$ cases, on peut ainsi conclure qu'il y a $16!$ états possibles. En espace mémoire, peu importe comment on représente un état (Liste, Array, etc...), sotcker de nombreux états parait difficielement envisageable. Sachant qu'en plus un état initial quelconque peu mener à une solution optimale de profondeur de l'ordre de 50 (cf. énoncé)
@@ -166,6 +182,74 @@ let move i j =
   end
   ```
 
-  ## Question 16
+## Question 16
 
-  ```ocaml
+```ocaml
+let tente_gauche () = 
+  match (!solution, !lj) with
+    |_, 1 -> false
+    |Droite::t, _ -> false
+    |_ , _ -> solution := Gauche :: (!solution) ;
+              gauche () ;
+              true
+  ```
+
+## Question 17
+Pour pouvoir tester tous les cas possibles, il faut être capable de revenir en arrière sur un mouvement afin de tester les solutions suivantes dans le cas où un mouvement ne serai optimal.
+Pour cela, on définit la fonction `annule: unit -> bool`, qui annule le dernier mouvement et met à jour les positions des cases.
+
+```ocaml
+let annule () =
+  match !solution with
+    |[] -> false
+    |h::t -> begin 
+              solution := t ; 
+              (match h with
+              |Gauche -> droite ()
+              |Droite -> gauche ()
+              |Haut -> bas ()
+              |Bas -> haut ());
+              false
+              end
+;;
+```
+
+On peut maintenant procédé au codage de la fonction `dfs` (en considérant que `!h` correspond à la valeur de la fonction addmissible h de la question **14**).
+
+```ocaml
+let rec dfs m p =
+  let c = p + !h in
+  if c > m then 
+    begin
+    if c < !min || !min = -1 then
+    min := c ;
+    false;
+    end
+  else 
+    begin
+    if !h = 0 then 
+      true
+    else (*test de tous les cas possibles*)
+      ((dfs m (p+1) || annule() ) && tente_droite()) ||
+      ((dfs m (p+1) || annule() ) && tente_gauche()) ||
+      ((dfs m (p+1) || annule() ) && tente_bas()) ||
+      ((dfs m (p+1) || annule() ) && tente_droite());
+    end
+;;
+```
+
+## Question 18
+
+```ocaml
+let taquin () =
+  let rec taquinstar m =
+if m = -1 then -1
+  else 
+    begin
+    min := -1 ;
+    if dfs m 0 then m else taquinstar (!min) ;
+    end 
+    in taquinstar (!h)
+;;
+```
+
