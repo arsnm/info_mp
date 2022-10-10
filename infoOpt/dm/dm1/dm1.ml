@@ -14,9 +14,10 @@ let bfs () =
     |[] -> (match b with
           |[] -> -1
           |_ -> dissimulatewhile b [] p+1)
-    |h::t -> if final h then p else dissimulatewhile t (List.append (suivants(h)) b) p
+    |h::t -> if final h then p else dissimulatewhile t ((suivants(h)) @ b) p
 in dissimulatewhile [initial] [] 0 ;;
 
+print_int
 let ids () = 
   let rec dfs m e p = 
     if p>m then false 
@@ -63,4 +64,27 @@ let idastar () =
   done;
   !m_final - 1 ;;
 
-print_int(idastar())
+let grid = [| [|0; 1; 2; 3 |];
+              [|4; 5; 6; 7 |];
+              [|8; 9; 10; 11|];
+              [|12; 13; 14; -1|]|]
+
+let h = ref 0
+let li = ref 3
+let lj = ref 3
+
+let h_terme i j v =
+  abs (i - v/4) +  abs (j - v mod 4)
+
+let move i j = 
+  let v = grid.(i).(j) in 
+  begin
+    grid.(!li).(!lj) <- grid.(i).(j) ; 
+    grid.(i).(j) <- -1 ; (* Représentation de la case vide comme étant la case contenant -1*)
+    h := !h - (h_terme i j v) + (h_terme !li !lj v);
+    lj := j;
+    li := i
+  end
+
+let tente_gauche () =
+  if 
