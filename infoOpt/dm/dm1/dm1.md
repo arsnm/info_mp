@@ -4,6 +4,7 @@ subtitle: Arsène MALLET - MP*
 toc: false
 toc-title: Sommaire
 toc-depth: 2
+papersize: a4
 header-includes:
   - \usepackage{stmaryrd}
   - \usepackage{fancyhdr}
