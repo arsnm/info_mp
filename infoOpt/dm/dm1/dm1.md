@@ -246,11 +246,11 @@ let rec dfs m p =
 ```ocaml
 let taquin () =
   let rec taquinstar m =
-    if m = -1 then -1
+    if m = -1 then []
       else 
         begin
         min := -1 ;
-        if dfs m 0 then m else taquinstar (!min) ;
+        if dfs m 0 then !solution else taquinstar (!min) ;
         end ;
   in taquinstar (!h) ;;
 ```

@@ -23,7 +23,6 @@ let bfs () =
     |h::t -> if final h then p else dissimulatewhile t ((suivants(h)) @ b) p
 in dissimulatewhile [initial] [] 0 ;;
 
-print_int
 let ids () = 
   let rec dfs m e p = 
     if p>m then false 
@@ -188,18 +187,16 @@ let rec dfs m p =
 
 let taquin () =
   let rec taquinstar m =
-    if m = -1 then -1
+    if m = -1 then []
       else 
         begin
         min := -1 ;
-        if dfs m 0 then m else taquinstar (!min) ;
+        if dfs m 0 then !solution else taquinstar (!min)
         end ;
   in taquinstar (!h) ;;
 
-print_int !h  ;;
 
-let sol1 = taquin () in
-print_int(sol1) ;;
+let sol1 = taquin ();;
 
 let rec print_deplacement_list l = 
   match l with
@@ -212,4 +209,4 @@ let rec print_deplacement_list l =
 
 ;;
 
-print_deplacement_list(!solution)
+print_deplacement_list(sol1)
