@@ -17,4 +17,8 @@
 *.cb2
 .*.lb
 *.fdb_latexmk
-*synctex.gz
+*.synctex.gz
+*.pygstyle
+*.pygtex
+
+_minted-template/

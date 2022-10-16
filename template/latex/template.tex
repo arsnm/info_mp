@@ -9,6 +9,9 @@
 \usepackage[ddmmyyyy]{datetime}
 \usepackage[a4paper, portrait, margin=30mm]{geometry} % définie le format de la page
 
+%code formatting
+\usepackage{minted}
+
 %divers commands
 \newcommand{\bb}[1]{\mathbb{#1}}
 \newcommand{\encadrer}[1]{\fbox{
@@ -46,4 +49,13 @@
 
 \lipsum[1-2]
 
+\section*{Question 2}
+
+Code example : 
+\begin{minted}[]{ocaml}
+    type 'a t = { name : string; mutable info : 'a};;
+    let p = { name = "John"; info = 23 };;
+    let double_quote = '"'
+    let broken_highlight = ()
+\end{minted}
 \end{document}
