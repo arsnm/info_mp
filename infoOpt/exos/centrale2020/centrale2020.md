@@ -50,7 +50,7 @@ $$
 
 Une matrice $A \in \mathcal{M}_n (\mathbb{K})$ est antisymétrique si
 $\forall (i,j) \ \in \llbracket 1,n \rrbracket^2 , a_{i,j} = - a_{j,i}$ où les ($a_{i,j}$) sont les coefficients de la matrice $A$.
-Ici la matrice est antisymétrique puisque les résultats entre les candidats sont les mêmes au signe près du gagnant : soit $C_1,C_2 \in \llbracket 0,n \llbracket$ deux candidats. On suppose que $C_1$ remporte $q$ duel(s) ($0 \leq q \leq p$) contre $C_2$ . $C_2$ en perd donc $(p-q)$ face à $C_1$. Ainsi, en notant $a_{i,j}$ le score du score du candidats $i$ face au candidats $j$. Ainsi $a_{C_1,C_2} = q - (p - q) = 2q - p$ et $a_{C_2,C_1} = (p-q) - q = p - 2q = - a_{C_1,C_2}$ d'où l'antisymétrie de la matrice d'adjacence. 
+Ici la matrice est antisymétrique puisque les résultats entre les candidats sont les mêmes au signe près du gagnant : soit $C_1,C_2 \in \llbracket 0,n \llbracket$ deux candidats. On suppose que $C_1$ remporte $q$ duel(s) ($0 \leq q \leq p$) contre $C_2$ . $C_2$ en  gagne donc $(p-q)$ face à $C_1$. Ainsi, en notant $a_{i,j}$ le score du score du candidats $i$ face au candidats $j$. Ainsi $a_{C_1,C_2} = q - (p - q) = 2q - p$ et $a_{C_2,C_1} = (p-q) - q = p - 2q = - a_{C_1,C_2}$ d'où l'antisymétrie de la matrice d'adjacence. On remarque également que $2q$ est pair, et donc la parité de tous les $a_{i,j}$ dépend enfaite uniquement de la parité de $p$ le nombre de bulletins$. Ainsi, tous les 
 
 ## Question 4
 
