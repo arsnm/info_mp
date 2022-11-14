@@ -7,11 +7,13 @@
 \usepackage{fancyhdr}
 \usepackage{lastpage}
 \usepackage{lipsum}
+\usepackage{graphicx}
 \usepackage[ddmmyyyy]{datetime}
 \usepackage[a4paper, portrait, margin=30mm]{geometry} % définie le format de la page
 
 %code formatting
 \usepackage{minted}
+\usemintedstyle{manni}
 
 %divers commands
 \newcommand{\bb}[1]{\mathbb{#1}}
@@ -30,18 +32,21 @@
 
 %document info
 \makeatletter
-\title{Title}
+\title{TD - Fil de priorité et Tas}
 \date{\today}
 \newcommand{\matiere}{Informatique}
 \newcommand{\classe}{MP^*}
 \author{Arsène MALLET}
 
 %header
-\lhead{\@author}
-\chead{\matiere}
-\rhead{\@date}
-
+\fancypagestyle{firstpage}{
+    \fancyhead[L]{\@author}
+    \fancyhead[C]{\matiere}
+    \fancyhead[R]{\@date}
+}
 \begin{document}
+
+\thispagestyle{firstpage}
 
 \begin{center}
     \huge{\@title}
