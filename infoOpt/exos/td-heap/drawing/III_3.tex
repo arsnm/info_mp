@@ -1,0 +1,18 @@
+\documentclass[border = 5pt, tikz]{standalone}
+
+\begin{document}
+\begin{tikzpicture}[
+  every node/.style = {minimum width = 2em, draw, circle},
+  level/.style = {sibling distance = 15mm, level distance = 12mm}
+  ]
+  \node {2,2}
+  child {node {1,4}
+        child {node {1,7}}
+        child {edge from parent[draw = none]}
+  }
+  child {node {5,6}
+        child {node {3,8}}
+        child {edge from parent[draw = none]}
+  };
+\end{tikzpicture}
+\end{document}

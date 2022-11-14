@@ -21,4 +21,4 @@
 *.pygstyle
 *.pygtex
 
-_minted-template/
+*_minted*
