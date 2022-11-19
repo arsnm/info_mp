@@ -1,0 +1,19 @@
+\documentclass[varwidth = 20cm]{standalone}
+\fontfamily{'Hack Nerd Font Mono'}
+\usepackage{minted}
+
+
+\begin{document}
+
+\begin{minted}[fontsize = \Huge]{ocaml}
+    let rec chemin g u v =
+        let n = Array.length g in
+        let visited = Array.make n false in
+        let rec aux w =
+            if w = v then true
+            else if visited.(w) then false
+            else List.exists aux g.(w) in
+        aux u ;;
+\end{minted}
+
+\end{document}
