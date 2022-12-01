@@ -1,0 +1,19 @@
+\documentclass[varwidth=10cm]{standalone}
+\fontfamily{'Hack Nerd Font Mono'}
+\usepackage{minted}
+
+
+\begin{document}
+\begin{minted}{ocaml}
+    let est_biparti g =
+        let n = Array.length g in 
+        let color = Array.make n (-1) in
+        (* color.(v) sera la couleur du sommet v *)
+        let rec aux c v =
+            if color.(v) = -1 then (
+                color.(v) <- c;
+                List.for_all (aux (1 - c)) g.(v);
+            )
+            else color.(v) = c
+\end{minted}
+\end{document}

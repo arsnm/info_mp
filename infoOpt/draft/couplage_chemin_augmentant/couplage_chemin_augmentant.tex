@@ -1,0 +1,26 @@
+\documentclass[varwidth = 10cm]{standalone}
+\fontfamily{'Hack Nerd Font Mono'}
+
+
+\begin{document}
+
+{Démonstration} \\
+Si $G = (V, E)$, soit $ v \in V $
+
+Supposons que :
+\begin{itemize}
+    \item $ v \in e_1$ où $e_1 \in M \Delta P $
+    \item $ v \in e_2$ où $e_2 \in M \Delta P $
+\end{itemize}
+
+On ne peut pas avoir $ e_1 \in M $ et $ e_2 \in M $ (car $M$ couplage) ni $e_1 \in P \backslash M$ et $e_2 \in P \backslash M$ (car ce ne serait pas alternant).
+Par symétrie, supposons $ e_1 \in M \backslash P $ et $ e_2 \in P \backslash M $
+
+\begin{enumerate}
+    \item Si $v$ est extrémité de P: \textbf{absurde} car $v$ est libre ($P$ augmentant)
+    mais $v$ adjacent à $e_1 \in M$    
+    \item $ \exists e_3 \neq e_2 \in P$ adjacent à $v$, $P$ est augmentant et $e_2 \notin M$ donc $e_3 \in M$
+    \textbf{absurde} car $v$ adjacent à 2 arêtes de $M$
+\end{enumerate}
+
+\end{document}

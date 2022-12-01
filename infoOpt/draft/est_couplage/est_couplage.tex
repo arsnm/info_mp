@@ -1,0 +1,24 @@
+\documentclass[varwidth = 35cm]{standalone}
+\fontfamily{'Hack Nerd Font Mono'}
+\usepackage{minted}
+
+
+\begin{document}
+\begin{minted}[fontsize = \Huge]{ocaml}
+    let est_couplage g m =
+    let n = Array.length g in
+    let libre = Array.make n false in (* libre.(v) = sommet déjà vu *)
+    let rec aux m =
+        match m with
+        |[] -> true
+        |(x, y)::q -> if g.(x).(y) = 1 && libre.(x) && libre.(y)
+                    then begin
+                        libre.(x) <- false ;
+                        libre.(y) <- false ;
+                        aux q
+                        end
+                    else false
+        in
+        aux m
+\end{minted}
+\end{document}
