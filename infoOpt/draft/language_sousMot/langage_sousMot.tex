@@ -1,0 +1,19 @@
+\documentclass[varwidth = 20cm]{standalone}
+\fontfamily{'Hack Nerd Font Mono'}
+\usepackage{minted}
+
+
+\begin{document}
+
+\begin{minted}[fontsize = \Huge]{ocaml}
+    let sous_mot u v = (*u est un sous mot de v ?*)
+        let iv = ref 0 in 
+        let iu = ref 0 in
+        while !iv <> String.length v && !iu <> String.length u do 
+            if u.[iu] = v.[iv] then incr iu;
+            incr iv
+        done;
+        !iu  = String.length u ;;
+\end{minted}
+
+\end{document}

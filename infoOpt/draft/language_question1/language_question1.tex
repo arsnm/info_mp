@@ -1,0 +1,20 @@
+\documentclass[varwidth = 10cm]{standalone}
+\fontfamily{'Hack Nerd Font Mono'}
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{stmaryrd}
+\usepackage{fancyhdr}
+
+
+\begin{document}
+
+Soit $H_n$ le prédicat : "Si $u \in \Sigma^*$, alors $a=b$ et $\exists k$ tq $u = a^k$ "
+
+\begin{itemize}
+    \item Initialisation : $H_0$ est vraie car $au = ub$ revient à $a = b$ ($u = \epsilon$) et $u = a^0$
+    \item Récurrence : si $n \in \mathbb{N}$, supposons $H_n$, \\
+    soit $a, b, u$ tq $|u| = n + 1$, $u = u_1u_2...u_{n+1}$ et $au = ub$, \\
+    Donc $ a = u_1$ donc $ a = av $ avec $|v| = n$. \\
+    De plus $au = ub \implies aav = avb$, donc $av = vb$, ainsi d'après $H_n$, $u = a^{k+1}$ \\
+    D'où le résultat.
+\end{itemize}
+\end{document} 
