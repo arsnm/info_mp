@@ -104,6 +104,19 @@
 \end{enumerate}
 \section{Hauteur d'\'etoile}
 
+\begin{enumerate}
+    \item $h((ba^*b)^*) = 1 + h(ba^*b) = 1 + max(h(ba^*), h(b)) = 1 + max(h(a^*), h(b)) = 2$
+    \item \begin{minted}{ocaml}
+        let rec h expr = Str.string_match
+            | a -> 0
+            | a + b | ab -> max(h(a), h(b))
+            | a* -> 1 + h(a)
+        
+    \end{minted}
+    \item Les languages d'hauteur d'\'etoile 0 contiennent uniquement un nombre fini de mots.
+    \item 
+\end{enumerate}
+
 \section{Cl\^oture par sous-mot}
 
 \section{Utilisisation de la programmation dynamique sur les mots}
