@@ -96,25 +96,44 @@
     \end{minted}
     \item $\mathcal{H}(L) = 0^*10^*1^* | 0^*1^*01^* | \varepsilon$ 
     \item \begin{itemize}
-        \item[--] $f(\varnothing) = \varnothing$ \newline
-            $f(\varepsilon) = \varepsilon$ \newline
+        \item[--] $f(\varnothing) = \varnothing$ ;
+            $f(\varepsilon) = \varepsilon$ ; 
             si $a \in \sum$, $f(a) = \sum $
-        \item[--]
+        \item[--] $f(e_1|e_2) = f(e_1)f(e_2)$
+        \item[--] $f(e_1e_2) = f(e1)e2 | e_1f(e_2)$
+        \item[--] $f(e^*) = e^*f(e)e^*$
     \end{itemize}
+    $P_n$ : Si $e$ est une expression rationnel de taille $n$ alors $\mathcal{H}$ est rationel.
+    \begin{itemize}
+        \item $P_1$ est vraie : \begin{itemize}
+            \item $\mathcal{H}(\varnothing) = \varnothing$
+            \item $\mathcal{H}(\epsilon) = \epsilon$ ...
+        \end{itemize}
+        \item $\forall k \leq n, P_k \implies P_{n + 1}$, soit $e$ une expression de talle $n + 1$ \newline
+            Si $e = e_1|e_2$, on applique $P_k$ sur $e_1$ et $e_2$, ce qui nous donne $e'_1$ et $e'_2$ d'où $\mathcal{H}(e) = e'_1|e'_2$
+    \end{itemize}
+    \item \begin{minted}{ocaml}
+        let rec f e = match e with
+            |Vide -> Vide
+            |Epsilon -> Epsilon
+            |L a -> Union(L 0, L 1)
+            |Union(e_1, e_2) -> Union(f e_1, f e_2)
+            |Concat(e_1, e_2) -> Union(Concat(f e_1, e_2), Concat(e_1, f e_2))
+            |Etoile e -> Concat(Concat(Etoile e, f e), Etoile e)
+    \end{minted}
 \end{enumerate}
+
 \section{Hauteur d'\'etoile}
 
 \begin{enumerate}
     \item $h((ba^*b)^*) = 1 + h(ba^*b) = 1 + max(h(ba^*), h(b)) = 1 + max(h(a^*), h(b)) = 2$
     \item \begin{minted}{ocaml}
-        let rec h expr = Str.string_match
-            | a -> 0
-            | a + b | ab -> max(h(a), h(b))
-            | a* -> 1 + h(a)
-        
+        let rec h expr = match expr with
+            |Vide |Epsilon |L(_) -> 0
+            | Union(a, b) |Concat(a, b) -> max(h(a), h(b))
+            | Etoile(a) -> 1 + h(a)
     \end{minted}
     \item Les languages d'hauteur d'\'etoile 0 contiennent uniquement un nombre fini de mots.
-    \item 
 \end{enumerate}
 
 \section{Cl\^oture par sous-mot}
