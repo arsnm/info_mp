@@ -72,14 +72,69 @@
 
 \section{Algorithmes de d\'eterminisation}
 
+\begin{enumerate}
+    \item \image{}{0.5}{img/I-1.jpeg}
+    \item $L = a((b|a)bb^*a)^*$
+\end{enumerate}
+
 \section{Cl\^oture des langages reconnaissables}
+
+\begin{enumerate}
+    \item \begin{itemize}
+        \item[] Soit $A = (\Sigma, Q, I, F, \delta)$ tq $L = L(A)$
+        \item[] Soit $A' = (\Sigma, Q, F, I \delta')$ où $\delta'(q, a) = \{ q |  \delta(q', a) = q \}$
+        \item[] \image{}{0.2}{img/II-1.jpeg}
+        \item Mq : $m \in L(\tilde A) \Leftrightarrow ... \Leftrightarrow m \in \widetilde{L(A)}$
+        \item[] $m = m_1...m_n \in L(\tilde A)$
+        \item[] $\Leftrightarrow \exists \text{ chemin } q_0 \leftarrow q_1 ... \leftarrow q_n \text{ dans } \tilde A$
+        \item[] $\Leftrightarrow \exists \text{ chemin } q_0 \rightarrow q_1 ... \rightarrow q_n \text{ dans } A$
+        \item[] $\Leftrightarrow m_1...m_n \in L(A)$
+        \item[] $\Leftrightarrow \tilde m \in L(A)$
+        \item[] $\Leftrightarrow \in \widetilde{L(A)}$
+    \end{itemize}
+    \item \begin{itemize}
+        \item[] Soit $A = (\Sigma, Q, I, F, \delta)$ tq $L = L(A)$
+        \item[] Soit $A' = (\Sigma, Q, I, F', \delta)$ où $F'$ est l'ensembles des états co-accessibles dans $A$,
+        \item[] $m \in L(A') \Leftrightarrow m \in Pref(L)$
+        \item[] Soit $A'' = (\Sigma, Q, I', F, \delta)$ où $I'$ est l'ensembles des états accessibles dans $A$
+        \item[] Soit $A''' = (\Sigma, Q, I', F', \delta)$
+    \end{itemize}
+    \item \begin{itemize}
+        \item $H_n$ : "Si $e$ est une expression rationnelle de taille $n$ alors il existe une expression rationnelle pour $Pref(e)$"
+        \item[-] $H_1$, $e = \varnothing, \varepsilon, a \in \Sigma$
+        \item[] $Pref(\varnothing) = \varnothing$, $Pref(\varepsilon) = \varepsilon$, $Pref(a) = \varepsilon|a$
+        \item[-] Soit $n \in \bb{N}^*$, supposons $H_k$, $\forall k \leq n$
+        \item[] Soit $e$ expression rationnelle de taille $n + 1$:
+        \item[] \begin{enumerate}
+            \item Si $e = e_1 | e_2$ : $Pref(e) = Pref(e_1)|Pref(e_2)$, une expression rationnelle
+            \item Si $e = e_1e_2$: $Pref(e) = Pref(e_1)|e_1Pref(e_2)$, une expression rationnelle
+            \item Si $e = e_1^*$: $Pref(e) = e1^*Pref(e_1)$, une expression rationnelle
+        \end{enumerate}
+        \item $Suff(L) = \widetilde{Pref(\tilde L)}$, or $\tilde L$ est rationnelle d'apres cours, donc $\widetilde{Pref(\tilde L)}$ est également rationnelle d'après ce que l'on vient de démontrer.
+        \item $Fact(L) = Suff(Pref(L))$ 
+    \end{itemize}
+\end{enumerate}
 
 \section{Reconnaissable ou non ?}
 
 \begin{enumerate}
-    \item \image{}{0.2}{img/III-1.jpg} Ainsi, il existe un automate $A_1$ tel que $L(A_1) =L_1$ donc $L_1$ est reconnaissable.
+    \item \image{}{0.2}{img/III-1.jpeg} Ainsi, il existe un automate $A_1$ tel que $L(A_1) =L_1$ donc $L_1$ est reconnaissable.
     \item \image{}{0.2}{img/III-2.jpeg} De même, il existe un automate $A_2$ tel que $L(A_2) =L_2$ donc $L_2$ est reconnaissable.
-    \item 
+    \item \begin{itemize}
+        \item[] Même démo que pour $\{a^nb^n | n \in \bb{N}\}$ :
+        \item[] $\{a^nb^n | n \in \bb{N}\} = L_3 \cap a^*b^* \implies L_3$ non reconnaissable.
+    \end{itemize}
+    \item \image{}{0.8}{img/III-4.jpeg}
+    \item \begin{itemize}
+        \item[] Supposons $L_5$ reconnaissable,
+        \item[] Soit $n$ l'entier donné par le Lemme de l'\'Etoile,
+        \item[] Il existe p, nombre premier supérieur à $n$
+        \item[] Soit $u = a^p$. $u \in L_5$ et $|u| \geq n$ donc :
+        \item[] $\exists x, y, z \in \Sigma^*$ tq $u = xyz$,  $|xy| \leq n$, $y \neq \varepsilon$
+        \item[] $\exists i, j k$ tq $x = a^i$, $y = a^j$, $z = a^k$
+        \item[] $xy^{i+k}z = a^ia^{j(i + k)}a^k = a^{(i + k)(1 + j)} \notin L_5$ car $k \geq 2$
+        \item[] \textbf{Absurde}, donc $L_5$ non reconnaissable.
+    \end{itemize}
 \end{enumerate}
 
 \section{Algorithmes sur les automates}

@@ -1,0 +1,98 @@
+\documentclass{article}
+
+% pacakages
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{stmaryrd}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{lipsum}
+\usepackage{graphicx}
+\usepackage[ddmmyyyy]{datetime}
+\usepackage{adjustbox}
+\usepackage[a4paper, portrait, margin=20mm]{geometry} % définie le format de la page
+\usepackage[explicit]{titlesec}
+\usepackage{color, soul}
+\setulcolor{red}
+
+%personalized section style
+\titleformat{\section}
+{\Large\bfseries}
+{\thesection}{1em}{\ul{#1}}
+
+%code formatting
+\usepackage{minted}
+\usemintedstyle{manni}
+
+%divers commands
+\newcommand{\bb}[1]{\mathbb{#1}}
+\newcommand{\encadrer}[1]{\fbox{color=red
+    \begin{minipage}{0.90\textwidth}
+        #1
+    \end{minipage}
+}}
+\renewcommand{\thesection}{\Roman{section}} % Roman numerals for sections
+\setlength{\headheight}{12.5pt}
+\newcommand{\image}[3]{ %command to insert image
+    \begin{minipage}[t]{\linewidth}
+        #1
+              \adjustbox{valign=t}{%
+                \includegraphics[width=#2\linewidth]{#3}%
+              }
+    \end{minipage}}
+
+\renewcommand*{\thesection}{\arabic{section}}
+\renewcommand*{\thesubsection}{\arabic{section}.\arabic{subsection}}
+
+%page numerotation
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[R]{\thepage/\pageref{LastPage}}
+
+%document info
+\makeatletter
+\title{DM2 - Mines MP 2019}
+\date{\today}
+\newcommand{\matiere}{Informatique Option}
+\newcommand{\classe}{MP\textsuperscript{*} }
+\author{Arsène MALLET}
+
+%header
+\fancypagestyle{firstpage}{
+    \fancyhead[L]{\@author}
+    \fancyhead[C]{\classe - \matiere}
+    \fancyhead[R]{\@date}
+}
+
+
+\begin{document}
+
+\thispagestyle{firstpage}
+
+\begin{center}
+    \huge\bfseries{\@title}
+\end{center}
+
+\section{Premiers exemples}
+
+\begin{enumerate}
+    \item Le langage reconnu par l'automate $A_1$ est l'ensemble des mots de taille impaire.
+    \item Le langage reconnu par l'automate $A_2$ est l'ensembles des mots contenant un nombre impair de $b$.
+    \item $L(A_1) = (a \cdot a|b \cdot b|a \cdot b|b \cdot a)^* \cdot (a|b)$
+    \item $L(A_1) = (a|b \cdot a^* \cdot b)^*\cdot b\cdot a^*$
+    \item \begin{minted}{ocaml}
+    let a2 = 2, [|0, 1 ; 1, 0|], [|false; true|]  ;;
+    \end{minted}
+\end{enumerate}
+
+\section{\'Etats accessibles d'un automate}
+
+\begin{enumerate}
+    \setcounter{enumi}{5}
+    \item \begin{minted}{ocaml}
+    let numero n 
+    \end{minted}
+\end{enumerate}
+
+
+\end{document}
