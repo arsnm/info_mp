@@ -12,11 +12,12 @@
 \usepackage{graphicx}
 \usepackage[ddmmyyyy]{datetime}
 \usepackage{adjustbox}
-\usepackage[a4paper, portrait, margin=20mm]{geometry} % définie le format de la page
+\usepackage[a4paper, portrait, margin=20mm]{geometry} % define the page format
 \usepackage[explicit]{titlesec}
 \usepackage{color, soul}
 \setulcolor{red}
-%reference pour les items de 'enumerate'
+
+%reference for the items of 'enumerate'
 \usepackage{enumitem, hyperref}
 \makeatletter
 \def\namedlabel#1#2{\begingroup
@@ -390,7 +391,7 @@
         Le résultat est clairement similaire avec $\psi$, si on suppose $\psi(q_j) = \psi(q_{j + 1})$. \newline
         Ainsi en définissant la suite $\Delta_0,\Delta_1, ..., \Delta_k$, avec $\forall j \in \llbracket 0 ; k \rrbracket, \; \Delta_j = \delta_\mathcal{B}(q_j, \sigma)$, alors
         \begin{equation*}
-            \forall \: 0 \leq j < k, \; \varphi(\Delta_j) = \varphi(\Delta_{j + 1}) \text{ ou } \psi(\Delta_j) = \psi(\Delta_{j + 1}) \text{ (d'après ce qu'on vient de montrer).}
+            \forall \: 0 \leq j < k, \; \varphi(\Delta_j) = \varphi(\Delta_{j + 1}) \text{ ou } \psi(\Delta_j) = \psi(\Delta_{j + 1}) \text{ (d'après ce que l'on vient de montrer).}
         \end{equation*}
         D'où le résultat : $\boxed{\delta_\mathcal{B}(p, \sigma) \equiv \delta_\mathcal{B}(q, \sigma)}$ .
         \item Soit $(p, q) \in Q_\mathcal{B}^2$ tel que $p \equiv q$. Par symétrie de la relation $\equiv$, montrer que $ p \in F_\mathcal{B} \implies q \in F_\mathcal{B}$ suffira à montrer l'équivalence. \newline 

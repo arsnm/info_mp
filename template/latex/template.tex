@@ -1,7 +1,9 @@
-% !TEX encoding = UTF-8 Unicode
 \documentclass{article}
 
 % pacakages
+\usepackage[french]{babel}
+\usepackage{caption}
+\usepackage[T1]{fontenc}
 \usepackage{amsmath, amsfonts, amssymb}
 \usepackage{stmaryrd}
 \usepackage{fancyhdr}
@@ -10,10 +12,20 @@
 \usepackage{graphicx}
 \usepackage[ddmmyyyy]{datetime}
 \usepackage{adjustbox}
-\usepackage[a4paper, portrait, margin=20mm]{geometry} % définie le format de la page
+\usepackage[a4paper, portrait, margin=20mm]{geometry} % define the page format
 \usepackage[explicit]{titlesec}
 \usepackage{color, soul}
 \setulcolor{red}
+
+%reference for the items of 'enumerate'
+\usepackage{enumitem, hyperref}
+\makeatletter
+\def\namedlabel#1#2{\begingroup
+    #2%
+    \def\@currentlabel{#2}%
+    \phantomsection\label{#1}\endgroup
+}
+\makeatother
 
 %personalized section style
 \titleformat{\section}
@@ -26,19 +38,21 @@
 
 %divers commands
 \newcommand{\bb}[1]{\mathbb{#1}}
-\newcommand{\encadrer}[1]{\fbox{
+\newcommand{\encadrer}[1]{\fbox{color=red
     \begin{minipage}{0.90\textwidth}
         #1
     \end{minipage}
 }}
-\renewcommand{\thesection}{\Roman{section}} % Roman numerals for sections
+% \renewcommand{\thesection}{\Roman{section}} % Roman numerals for sections
 \setlength{\headheight}{12.5pt}
+
+\graphicspath{ {./img/} } % define path to img 
 \newcommand{\image}[3]{ %command to insert image
     \begin{minipage}[t]{\linewidth}
         #1
-              \adjustbox{valign=t}{%
-                \includegraphics[width=#2\linewidth]{#3}%
-              }
+        \adjustbox{valign=t}{
+            \includegraphics[width=#2\linewidth]{#3}
+        }
     \end{minipage}}
 
 %page numerotation
@@ -71,14 +85,14 @@
     \huge\bfseries{\@title}
 \end{center}
 
-\section*{Probl\`eme 1}
+\section{Problem 1}
 
 \lipsum[1-2]
 
-\section*{Probl\`eme 2}
+\section{Problem 2}
 
 Code example : 
-\begin{minted}[]{ocaml}
+\begin{minted}[breaklines]{ocaml}
     type 'a t = { name : string; mutable info : 'a};;
     let p = { name = "John"; info = 23 };;
     let double_quote = '"'
