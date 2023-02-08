@@ -1,6 +1,9 @@
 \documentclass{article}
 
 % pacakages
+\usepackage[french]{babel}
+\usepackage{caption}
+\usepackage[T1]{fontenc}
 \usepackage{amsmath, amsfonts, amssymb}
 \usepackage{stmaryrd}
 \usepackage{fancyhdr}
@@ -13,6 +16,15 @@
 \usepackage[explicit]{titlesec}
 \usepackage{color, soul}
 \setulcolor{red}
+%reference pour les items de 'enumerate'
+\usepackage{enumitem, hyperref}
+\makeatletter
+\def\namedlabel#1#2{\begingroup
+    #2%
+    \def\@currentlabel{#2}%
+    \phantomsection\label{#1}\endgroup
+}
+\makeatother
 
 %personalized section style
 \titleformat{\section}
@@ -30,18 +42,17 @@
         #1
     \end{minipage}
 }}
-\renewcommand{\thesection}{\Roman{section}} % Roman numerals for sections
+% \renewcommand{\thesection}{\Roman{section}} % Roman numerals for sections
 \setlength{\headheight}{12.5pt}
+
+\graphicspath{ {./img/} } % define path to img 
 \newcommand{\image}[3]{ %command to insert image
     \begin{minipage}[t]{\linewidth}
         #1
-              \adjustbox{valign=t}{%
-                \includegraphics[width=#2\linewidth]{#3}%
-              }
+        \adjustbox{valign=t}{
+            \includegraphics[width=#2\linewidth]{#3}
+        }
     \end{minipage}}
-
-\renewcommand*{\thesection}{\arabic{section}}
-\renewcommand*{\thesubsection}{\arabic{section}.\arabic{subsection}}
 
 %page numerotation
 \pagestyle{fancy}
@@ -76,10 +87,10 @@
 \section{Premiers exemples}
 
 \begin{enumerate}
-    \item Le langage reconnu par l'automate $A_1$ est l'ensemble des mots de taille impaire.
-    \item Le langage reconnu par l'automate $A_2$ est l'ensembles des mots contenant un nombre impair de $b$.
-    \item $L(A_1) = (a \cdot a|b \cdot b|a \cdot b|b \cdot a)^* \cdot (a|b)$
-    \item $L(A_1) = (a|b \cdot a^* \cdot b)^*\cdot b\cdot a^*$
+    \item Le langage reconnu par l'automate $A_1$ est l'ensemble des \fbox{mots de taille impaire}.
+    \item Le langage reconnu par l'automate $A_2$ est l'ensembles des \fbox{mots contenant un nombre impair de $b$}.
+    \item $\boxed{L(A_1) = (a \cdot a|b \cdot b|a \cdot b|b \cdot a)^* \cdot (a|b)}$
+    \item $\boxed{L(A_1) = (a|b \cdot a^* \cdot b)^*\cdot b\cdot a^*}$
     \item \begin{minted}{ocaml}
     let a2 = 2, [|0, 1 ; 1, 0|], [|false; true|]  ;;
     \end{minted}
@@ -89,10 +100,308 @@
 
 \begin{enumerate}
     \setcounter{enumi}{5}
+
     \item \begin{minted}{ocaml}
-    let numero n 
+    let numero n a =
+        let t = Array.make n (-1) in
+        let rec aux index = function (*parcours la liste*)
+          |[] -> ()
+          |h::q -> t.(h) <- index ; aux (index + 1) q in
+        aux 0 a ; t ;;
     \end{minted}
+
+    \item \begin{minted}{ocaml}
+    let etats_accessibles aut = 
+        let n, delta, f = aut in 
+        let visited = Array.make n false in
+        let parcours = ref [] in
+        let aux etat =
+            if not visited.(etat) then 
+                begin
+                visited.(etat) <- true ;
+                parcours := etat :: !parcours ;
+                let succ_a, succ_b = delta.(etat) in
+                aux succ_a ;
+                aux succ_b
+                end in 
+        aux 0 ;;
+        List.rev !parcours
+    \end{minted}
+    \underline{Compl\'exit\'e} : La création d'une \verb|Array| de taille $n$ est en $O(n)$, et l'accés à un élément d'une liste, tout comme la concatenation d'un élément avec une liste, sont en $O(1)$. On ne s'intéresse donc qu'aux appels récursifs de la fonction \verb|aux|. Comme $|Q| = n$, et que pour tout $q \in Q$, il existe deux \'etats $q_1$ et $q_2$ (potentiellement égaux) tels que $\delta(q, a) = q_1$ et $\delta(q, b) = q_2$, la fonction \verb|aux| fait au plus $2^n$ appels récursifs, soit une compléxité en $\boxed{O(2^n)}$.
+
+    \item \begin{minted}{ocaml}
+    let partie_accessible aut = 
+        let n, delta, f = aut in
+        let new_etats = etats_accessibles aut in 
+        let apparition = numero n new_etats in
+        let new_n = List.length new_etats in
+        let new_delta = Array.make new_n (0,0) in
+        let new_f = Array.make new_n false in
+        let rec aux = function
+            |[] -> (new_n, new_delta, new_f)
+            |h::t -> let s = apparition.(h) in
+                    new_f.(s) <- f.(h);
+                    let succ_a, succ_b = delta.(h) in
+                    new_delta.(s) <- apparition.(succ_a) ,apparition.(succ_b);
+                    aux t in
+        aux new_etats ;;
+    \end{minted}
+
 \end{enumerate}
 
+\section{Morphismes d'automates}
 
+\subsection{Exemples de morphismes d'automates}
+
+\begin{enumerate}
+    \setcounter{enumi}{8}
+
+    \item $\varphi : \mathcal{A}_3 \rightarrow \mathcal{A}_2$ est représentée par \begin{tabular}{|c|c|}
+        \hline
+        $q$ & $\varphi(q)$ \\
+        \hline
+        $E$ & $C$ \\
+        \hline
+        $F$ & $C$ \\
+        \hline
+        $G$ & $D$ \\
+        \hline
+    \end{tabular}
+
+    \item $\varphi : \mathcal{A}_4 \rightarrow \mathcal{A}_2$ est représentée par \begin{tabular}{|c|c|}
+        \hline
+        $q$ & $\varphi(q)$ \\
+        \hline
+        $H$ & $C$ \\
+        \hline
+        $I$ & $C$ \\
+        \hline
+        $J$ & $D$ \\
+        \hline
+        $K$ & $D$ \\
+        \hline
+    \end{tabular}
+
+    \item Supposons qu'il existe un morphisme d'automate $\varphi  : \mathcal{A}_1 \rightarrow \mathcal{A}_2$, alors, pour vérifier $(2)$ : $\varphi(A) = B$, et pour vérifier $(4)$ : $\varphi(B) = D$. Or si $\varphi$ est un morphisme d'automates, alors d'après $(3)$,
+    \begin{eqnarray*}
+        \varphi(\delta_{\mathcal{A}_1}(A, a)) & = & \varphi(B) \\
+        & = & D \\
+        & = & \delta_{\mathcal{A}_2}(\varphi(A), a)
+    \end{eqnarray*}
+    Mais, $\varphi(A) = C$ d'après $(1)$, donc 
+    \begin{eqnarray*}
+        \delta_{\mathcal{A}_2}(\varphi(A), a) & = & \delta_{\mathcal{A}_2}(C, a) \\
+        & = & D \\
+        & = & C \\ 
+        & \rightarrow & \text{\underline{Absurde !}}
+    \end{eqnarray*}
+    Ainsi, \fbox{il n'existe pas de morphisme d'automates de $\mathcal{A}_1$ vers $\mathcal{A}_2$}.
+
+    \item Comme à la question précédente, supposons qu'il existe un morphisme d'automate $\varphi  : \mathcal{A}_5 \rightarrow \mathcal{A}_2$, alors $(2)$ et $(4)$ nous donne : $\varphi(L) = C$, $\varphi(M) = D$ et $\varphi(N) = C$ (car $N \notin F_{\mathcal{A}_5}$). $(3)$ impose alors, 
+    \begin{eqnarray*}
+        \varphi(\delta_{\mathcal{A}_5}(N, b)) & = & \varphi(L) \\
+        & = & C \\
+        & = & \delta_{\mathcal{A}_2}(\varphi(N), b) \\
+        & = & \delta_{\mathcal{A}_2}(C, b) \hspace{5mm} (\varphi(N) = C) \\
+        & = & D \\
+        & \rightarrow & \text{\underline{Absurde !}}
+    \end{eqnarray*}
+    Ainsi, \fbox{il n'existe pas de morphisme d'automates de $\mathcal{A}_5$ vers $\mathcal{A}_2$}.
+
+\end{enumerate}
+
+\subsection{Propri\'et\'es des morphismes d'automates}
+
+\begin{enumerate}
+    \setcounter{enumi}{12}
+
+    \item \label{itm:rec1} Soit $\mathcal{A}, \mathcal{B}$ deux automates. Supposons qu'il existe un morphisme d'automates $\varphi : \mathcal{A} \rightarrow \mathcal{B}$. \newline
+    Notons $\mathcal{P}(n)$ le prédicat : \og pour tout $q \in Q_\mathcal{A}$ et pour tout mot $m$ de taille $n$, $\varphi(\delta_\mathcal{A}^*(q, m)) = \delta_\mathcal{B}^*(\varphi(q), m)$ \fg. Montrons par récurrence simple, que pour tout $n \in \bb{N}$, $\mathcal{P}(n)$. \\[2mm] 
+    \underline{Initialisation} : Si $n = 0$, alors $m (= \varepsilon)$ est le mot vide, alors pour tout état $q$, \newline
+    $\delta_\mathcal{A}^*(q, \varepsilon) = q$ et $\delta_\mathcal{B}^*(\varphi(q), \varepsilon) = \varphi(q)$ donc $\varphi(\delta_\mathcal{A}^*(q, \varepsilon)) = \varphi(q) = \delta_\mathcal{B}^*(\varphi(q), \varepsilon)$. \\[2mm]
+    \underline{Hérédité} : Soit $n \in \bb{N}$, supposons $\mathcal{P}(n)$, montrons $\mathcal{P}(n) \Rightarrow \mathcal{P}(n + 1)$, \newline
+    Soit $q \in Q_\mathcal{A}$ un état quelconque et $m$ un mot de taille $n + 1$, on peut alors noter $m = \sigma m_r$ où $m_r$ est un mot de taille $n$. Ainsi, \begin{eqnarray*}
+        \varphi(\delta_\mathcal{A}^*(q, m)) & = & \varphi(\delta_\mathcal{A}^*(\delta_\mathcal{A}(q, \sigma), m_r)) \text{ par définition de } \delta^*_\mathcal{A} \\
+        & = & \delta_\mathcal{B}^*(\varphi(\delta_\mathcal{A}(q, \sigma)), m_r) \text{ par l'hypothèse de récurrence} \\
+        & = & \delta_\mathcal{B}^*(\delta_\mathcal{B}(\varphi(q), \sigma), m_r) \text{ par la propriété $(3)$ d'un morphisme d'automates} \\
+        & = & \delta_\mathcal{B}^*(\varphi(q), m) \text{ par définition de } \delta^*_\mathcal{B} 
+    \end{eqnarray*}
+    Donc $\forall n \in \bb{N}$, $\mathcal{P}(n)$ est vérifié. Ainsi, si $m \in L(\mathcal{A})$, alors $\delta^*_\mathcal{A}(i_\mathcal{A}, m) \in F_\mathcal{A}$, et donc $\varphi(\delta^*_\mathcal{A}(i_\mathcal{A}, m)) = \delta_\mathcal{B}^*(\varphi(i_\mathcal{A}), m)  = \delta_\mathcal{B}^*(i_\mathcal{B}, m) \in F_\mathcal{B}$ d'après ce que l'on vient de montrer, $(2)$ et $(4)$. Donc $\delta^*_\mathcal{B}(i_\mathcal{B}, m) \in F_\mathcal{B}$, et par conséquent $m \in L(\mathcal{B})$. \fbox{D'où le résultat}.
+    \item Soit $\mathcal{A}, \mathcal{B}$ deux automates \textbf{finies}, tels que $|Q_\mathcal{A}| = |Q_\mathcal{B}|$. Supposons qu'il existe un mortphisme d'automates $\varphi : \mathcal{A} \rightarrow \mathcal{B}$, alors $\varphi$ est surjective par définition. Or comme $|Q_\mathcal{A}| = |Q_\mathcal{B}|$, $\varphi \text{ surjective} \Leftrightarrow \varphi \text{ bijective}$. Donc \fbox{$\varphi$ est nécessairement bijective}. \newline
+    De plus: \begin{itemize}
+        \item $\varphi^{-1}$ est bijective donc surjective $(1)$
+        \item $\varphi^{-1}(i_\mathcal{B}) = \varphi^{-1}(\varphi(i_\mathcal{B})) = i_\mathcal{A}$ $(2)$
+        \item Soit $q \in F_\mathcal{B}$, d'après la définition de $\varphi, \forall \sigma \in \{ a, b\}$, $\varphi(\delta_\mathcal{A}(\varphi^{-1}(q), \sigma)) = \delta_\mathcal{B}(q, \sigma)$, et donc en appliquant $\varphi^{-1}$ à l'égalité : \newline
+        $\forall q \in Q_\mathcal{B}$, $\forall \sigma \in \{ a, b\}$, $ \varphi^{-1}(\delta_\mathcal{B}(q, \sigma)) = \delta_\mathcal{A}(\varphi^{-1}(q), \sigma)$ $(3)$
+        \item $\forall q \in Q_\mathcal{B}$, (encore une fois d'après la définition de $\varphi$), \begin{eqnarray*}
+            \varphi^{-1}(q) \in F_\mathcal{A} & \Longleftrightarrow & \varphi(\varphi^{-1}(q)) \in F_\mathcal{B} \\
+            & \Longleftrightarrow & q \in F_\mathcal{B} \text{ $(4)$}
+        \end{eqnarray*}
+    \end{itemize}
+    Donc \fbox{$\varphi^{-1}$ est bien un morphisme d'automates}.
+    \item Soit $\mathcal{A}, \mathcal{B}, \mathcal{C}$ trois automates et  $\varphi : \mathcal{B} \rightarrow \mathcal{C}$,  $\psi : \mathcal{A} \rightarrow \mathcal{B}$ deux morphismes d'automates.
+    \begin{itemize}
+        \item $\varphi$ et $\psi$ surjectives donc $\varphi \circ \psi$ est surjective $(1)$
+        \item $(\varphi \circ \psi)(i_\mathcal{A}) = \varphi(i_\mathcal{B}) = i_\mathcal{C}$ $(2)$
+        \item  $\forall q \in Q_\mathcal{A}$, $\forall \sigma \in \{ a, b\}$, $(\varphi \circ \psi)(\delta_\mathcal{A}(q, \sigma)) = \varphi(\delta_\mathcal{B}(\psi(q), \sigma)) = \delta_\mathcal{A}((\varphi \circ \psi)(q), \sigma)$ $(3)$
+        \item $\forall q \in Q_\mathcal{A}$, $q \in F_\mathcal{A} \Longleftrightarrow \psi(q) \in F_\mathcal{B} \Longleftrightarrow (\varphi \circ \psi)(q) \in F_\mathcal{C}$ $(4)$
+    \end{itemize}
+    Donc $\varphi \circ \psi : \mathcal{A} \rightarrow \mathcal{C}$ est un morphisme d'automates, \fbox{d'où le résultat}.
+\end{enumerate}
+
+\subsection{Existence de morphismes d'automates entre automates accessibles}
+
+\begin{enumerate}
+    \setcounter{enumi}{15}
+    
+    \item \label{itm:16} Soit $\mathcal{A}, \mathcal{B}$ deux automates \textbf{accessibles}, soit $\varphi : \mathcal{A} \rightarrow \mathcal{B}$ une application verifiant les propriétés $(2)$, $(3)$ et $(4)$. Le résulat montré par récurrence à la question \ref{itm:rec1}. est toujours valable puisque les seuls hypothèses utilisées ($(2)$, $(3)$ et $(4)$) sont vérfiées. \newline
+    Soit $q \in Q_\mathcal{B}$, comme $q$ est accesible, il existe $m \in L(\mathcal{B})$ tel que :
+    \begin{eqnarray*}
+        \delta^*_\mathcal{B}(i_\mathcal{B}, m) & = & q \\
+        & = & \delta^*_\mathcal{B}(\varphi(i_\mathcal{A}), m) \text{ d'après $(2)$} \\
+        & = & \varphi(\delta^*_\mathcal{A}(i_\mathcal{A}, m)) \text{ d'après la question \ref{itm:rec1}.}
+    \end{eqnarray*}
+    Or, comme $\delta^*_\mathcal{A}(i_\mathcal{A}, m) \in Q_\mathcal{A}$, alors il existe $q' \in Q_\mathcal{A}$ tel que $\varphi(q') = q$ donc $\varphi$ est surjective, d'où $\boxed{\text{(automates accessibles)} \land (2) \land (3) \land (4) \implies (1)}$
+    \item  
+    \begin{minted}[breaklines]{ocaml}
+    let existe_morphismes aut1 aut2 =
+        let n1, delta1, f1 = aut1 in 
+        let n2, delta2, f2 = aut2 in
+        let def = ref true in (*variable indiquant si un morphisme existe ou non*)
+        let visited = Array.make n1 false in
+        let morphisme = Array.make n1 (-1) in 
+        let construire etat1 etat2 = (*fonction qui construit le morphisme*)
+            if morphisme.(etat1) <> 1 (*si phi(q) ne s'est pas encore vu etre associe une image, on la definit*)
+                then begin
+                    if ( f1.(etat1) = f2.(etat2) ) || ( (not f1.(etat1)) = (not f2.(etat2)) ) (*test de la condition (4)*)
+                    then morphisme.(etat1) <- etat2 (*si (4) est respectee, alors on peut definir phi(q)*)
+                    else def := false (*sinon il n'existe pas de morphisme*)
+                end
+            else if morphisme.(etat1) <> etat2 (*si phi(q) est deja defini, mais que la condition (3) n'est pas respectee...*)
+                 then def := false (*... alors il n'existe pas de morphisme*)
+        in
+        let rec aux etat1 = (*fonction qui parcours l'automate afin de constuire le morphisme*)
+            if not visited.(etat1) (*on verifie que le sommet n'a pas deja ete visite*)
+            then begin
+                let etat2 = morphisme.(etat1) in
+                let succ1_a, succ1_b = delta1.(etat1) in (*on construit le morphisme recursivement, en partant du sommet que l'on visite*)
+                let succ2_a, succ2_b = delta2.(etat2) in
+                visited.(etat1) <- true ;
+                construire succ1_a succ2_a ; (*on definit les images de phi pour sigma = a*)
+                construire succ1_b succ2_b ; (*on definit les images de phi pour sigma = b*)
+                if !def then (aux succ1_a ; aux succ1_b) (*si le morphisme existe (i.e les etapes de construction se sont achevees), alors on continue jusqu'a ce que tous les sommets soient visites*)
+                end 
+        in
+        morphisme.(0) <- 0 ; (*initialisation de la constuction avec la condition (2)*)
+        aux 0 ; (*début du parcours*)
+        !def , morphisme ;; 
+    \end{minted}
+    \item  \begin{minipage}[t]{\linewidth}
+        \centering
+        \adjustbox{valign=t}{%
+            \includegraphics[width=0.5\linewidth]{A3xA4/A3xA4.pdf}%
+        }
+        \captionof*{figure}{Partie accessible de $\mathcal{A}_3 \times \mathcal{A}_4$}\label{fig:fig1}
+        \end{minipage}
+    \item \begin{minted}[breaklines]{ocaml}
+    let produit aut1 aut2 = 
+        let n1, delta1, f1 = aut1 in 
+        let n2, delta2, f2 = aut2 in 
+        let n = n1 * n2 in 
+        let f = Array.make n false in
+        let delta = Array.make n (0, 0) in
+        let prod_etats n x1 x2 = (*fonction auxiliaire pour calculer delta d'un produit d'automates*)
+        match x1, x2 with
+        |(a, b), (c, d) -> n*a + c, n*b + d in
+        for i = 0 to n1 - 1 do
+            for j = 0 to n2 - 1 do
+                begin
+                if f1.(i) && f2.(j) then
+                f.(n2 * i + j) <- true ;
+                delta.(n2 * i + j) <- prod_etats n2 delta1.(i) delta2.(j) ;
+                end
+            done; done;
+        partie_accessible (n, delta, f) ;;
+    \end{minted}
+    \item \label{itm:rec2} Soit $\mathcal{A}, \mathcal{A}'$ deux automates. \sloppy \newline
+    Notons $\mathcal{P}(n)$ le prédicat : \og pour tout état $(q, q') \in Q_\mathcal{A} \times Q_{\mathcal{A}'}$ et pour tout mot $m$ de taille $n$, $\delta_{\mathcal{A} \times \mathcal{A}'}^*((q, q'), m) = (\delta_\mathcal{A}^*(q, m),\delta_{\mathcal{A}'}^*(q', m))$ \fg. Montrons par récurrence simple, que pour tout $n \in \bb{N}$, $\mathcal{P}(n)$. \\[2mm] 
+    \underline{Initialisation} : Si $n = 0$, alors $m (= \varepsilon)$ est le mot vide, alors pour tout état $(q, q')$, $\delta_{\mathcal{A} \times \mathcal{A}'}^*((q, q'), \varepsilon) = (q, q')$ \newline 
+    Or $\delta_\mathcal{A}^*(q, \varepsilon) = q$ et $\delta_{\mathcal{A}'}^*(q', \varepsilon) = q'$ donc $\delta_{\mathcal{A} \times \mathcal{A}'}^*((q, q'), \varepsilon) = (q, q') = (\delta_\mathcal{A}^*(q, \varepsilon), \delta_{\mathcal{A}'}^*(q', \varepsilon))$ \\[2mm]
+    \underline{Hérédité} : Soit $n \in \bb{N}$, supposons $\mathcal{P}(n)$, montrons $\mathcal{P}(n) \Rightarrow \mathcal{P}(n + 1)$, \newline
+    Soit $(q, q') \in Q_\mathcal{A} \times Q_{\mathcal{A}'}$ un état quelconque et $m$ un mot de taille $n + 1$, on peut alors noter $m = \sigma m_r$ où $m_r$ est un mot de taille $n$. Ainsi, \begin{eqnarray*}
+        \delta_{\mathcal{A} \times \mathcal{A}'}^*((q, q'), m) & = & \delta_{\mathcal{A} \times \mathcal{A}'}^*(\delta_{\mathcal{A} \times \mathcal{A}'}((q, q'), \sigma), m_r) \text{ par définition de } \delta_{\mathcal{A} \times \mathcal{A}'}^* \\
+        & = & \delta_{\mathcal{A} \times \mathcal{A}'}^*((\delta_\mathcal{A}(q, \sigma),\delta_{\mathcal{A}'}(q', \sigma)), m_r) \text{ par par définition de } \delta_{\mathcal{A} \times \mathcal{A}'} \\
+        & = & (\delta_\mathcal{A}^*(\delta_\mathcal{A}(q, \sigma), m_r),\delta_{\mathcal{A}'}^*(\delta_{\mathcal{A}'}(q', \sigma), m_r)) \text{ d'après l'hypothèse de récurrence} \\
+        & = & (\delta_\mathcal{A}^*(q, m),\delta_{\mathcal{A}'}^*(q',  m)) \text{ par définition de $\delta_\mathcal{A}^*$ et $\delta_{\mathcal{A}'}^*$}
+    \end{eqnarray*}
+    Donc $\forall n \in \bb{N}$, $\mathcal{P}(n)$ est vérifié. Ainsi, si $(q, q') \in Q_\mathcal{A} \times Q_{\mathcal{A}'}$ est un état accessible, alors il existe $m$ tel que $(q, q') = \delta_{\mathcal{A} \times \mathcal{A}'}^*((i_\mathcal{A}, i_{\mathcal{A}'}), m) = (\delta_\mathcal{A}^*(i_\mathcal{A}, m),\delta_{\mathcal{A}'}^*(i_\mathcal{A'}, m))$.\newline 
+    Or comme $L(\mathcal{A}) = L(\mathcal{A}')$, $m \in L(\mathcal{A}) \Longleftrightarrow  m \in L(\mathcal{A'})$.  \fbox{D'où $q \in F_\mathcal{A} \Longleftrightarrow q' \in F_\mathcal{A'}$}.
+
+    \item Soit $\mathcal{A}, \mathcal{A}'$ deux automates accessibles qui acceptent le même langage. On considère $\mathcal{B}$ la partie accessible de $\mathcal{A} \times \mathcal{A'}$. \newline
+    Montrons qu'il existe un morphisme d'automates $\varphi : \mathcal{B} -> \mathcal{A}$ : \newline
+    Considérons $\varphi$ : $\begin{array}{ccc}
+        \mathcal{B} & \to & \mathcal{A} \\
+        (q, q') & \mapsto & q \\
+        \end{array}$. \newline
+    D'après la question \ref{itm:16}, comme $\mathcal{B}$ et $\mathcal{A}$ sont deux automates accessibles, il suffit de montrer que $\varphi$ vérifie $(2)$, $(3)$ et $(4)$ :
+    \begin{itemize}
+        \item Comme $i_\mathcal{B} = (i_\mathcal{A}, i_\mathcal{A'})$, on a directement $\varphi(i_\mathcal{B}) = i_\mathcal{A}$, ce qui montre que $\varphi$ vérifie $(2)$
+        \item Si $(q, q') \in Q_\mathcal{B}$, alors pour tout $\sigma \in \{a, b \}$, on a à la fois $\varphi(q, q') = q$ par définition de $\varphi$ et $\varphi(\delta_\mathcal{B}((q, q'), \sigma)) = \varphi(\delta_\mathcal{A}(q, \sigma), \delta_\mathcal{A'}(q', \sigma)) = \delta_\mathcal{A}(q, \sigma)$. Donc $\varphi$ vérifie $(3)$.
+        \item Enfin, soit $(q, q') \in Q_\mathcal{B}$ : 
+            \begin{itemize}
+                \item[($\Rightarrow$)] Si $(q, q') \in F_\mathcal{B}$, par définition de $\mathcal{B}$, $\varphi(q, q') = q \in F_\mathcal{A}$ ;
+                \item[($\Leftarrow$)] Si $\varphi(q, q') = q \in F_\mathcal{A}$, alors d'après la question \ref{itm:rec2}, $q' \in F_\mathcal{A'}$, et donc $(q, q') \in F_\mathcal{B}$ ; 
+            \end{itemize}
+            Donc $\varphi$ vérifie également $(4)$
+    \end{itemize}
+    Ainsi, on démontre bien \fbox{l'existence d'un morphisme d'automates entre $\mathcal{B}$ et $\mathcal{A}$}. \newline
+    \fbox{La symétrie du problème entre $\mathcal{A}$ et $\mathcal{A'}$} permet de conclure.
+\end{enumerate}
+
+\subsection{Diagramme d'automates}
+
+\begin{enumerate}
+    \setcounter{enumi}{21}
+
+    \item Montrons que $\equiv$ définit bien une relation d'équivalence :
+        \begin{itemize}
+            \item Si $p \in Q_\mathcal{B}$ alors il existe une suite de longueur $0 + 1$ constituée du terme $ p = q_0 = p $ donc $p \equiv p $. Ainsi \fbox{$\equiv$ est réfléxive}.
+            \item Soit $(p,q) \in Q_\mathcal{B}^2$ tel que $p \equiv q$, par définition, il existe une suite de longueur $k + 1 \in \bb{N^*}$ constituée des termes $p = q_0, q_1,..., q_k = q$, alors en considérant la suite constituée des termes $q = p_0, p_1, ..., p_{k - 1}, p_k = p$, où $ \forall \: 0 \leq j \leq k, p_j = q_{k - j}$ . Ainsi on a : \begin{multline*}
+                \forall \: 0 \leq j < k, \; \varphi(p_{j + 1}) = \varphi(q_{\underbrace{k - j - 1}_{\in \llbracket 1 ; k \rrbracket}}) = \varphi(q_{k - j}) = \varphi(p_j) \\
+                \text{ou   }  \psi(p_{j + 1}) = \psi(q_{\underbrace{k - j - 1}_{\in \llbracket 1 ; k \rrbracket}}) = \psi(q_{k - j}) = \psi(p_j)
+            \end{multline*}
+            Soit, $\forall \: 0 \leq j < k, \; \varphi(p_j) = \varphi(p_{j + 1}) \text{ ou } \psi(p_j) = \psi(p_{j + 1})$ \newline
+            Ce qui montre $p \equiv q \implies q \equiv p$, et donc que \fbox{$\equiv$ est symétrique}.
+            \item Soit $(p, q, r) \in Q_\mathcal{B}^3$ tel que $p \equiv q$ et $q \equiv r$, alors il existe deux suites, de taille respective $l + 1$ et $m + 1$ ($(l, m) \in \bb{N}^2$), constituées des termes $p = q_0, q_1, ... , q_l = q$ et $ q = r_0, r_1, ... , r_m = r$. \newline
+            Alors en considérant la suite de taille $ k + 1 $ (où $ k = l + m \in \bb{N}$) constituée des termes \newline
+            $p = q_0, q_1, ... , q_l = r_0, r_1, ... , r_m = r$, on a clairement :
+            \begin{align*} \forall \: 0 \leq j < k, \; \varphi(p_j) = \varphi(p_{j + 1}) \text{ ou } \psi(p_j) = \psi(p_{j + 1}) \text{\footnotesize{(même lorsque $j = l$ puisque $\varphi(q_l) = \varphi(r_0) = \varphi(r_1)$)}} \end{align*}
+            Donc $p \equiv q \land q \equiv r \implies p \equiv r$, ce qui conclut sur la \fbox{transitivité de $\equiv$}.
+        \end{itemize}
+        On a ainsi montré que \fbox{$\equiv$ est une relation d'équivalence}.
+
+        \item Soit $(p, q) \in Q_\mathcal{B}^2$ tel que $p \equiv q$. Soit $p = q_0, q_1, ..., q_k = q$ la suite associée à $\equiv$. \newline 
+        Soit $\sigma \in \{a , b \}$, $j \in \llbracket 0;k \llbracket$. Si $\varphi(q_j) = \varphi(q_{j + 1})$, il découle :
+        \begin{align*}
+            \varphi(\delta_\mathcal{B}(q_j, \sigma)) &= \delta_\mathcal{A}(\varphi(q_j), \sigma) & \text{par propriété de morphisme de $\varphi$} \\
+                                                    &= \delta_\mathcal{A}(\varphi(q_{j + 1}), \sigma) \\
+                                                    &= \varphi(\delta_\mathcal{B}(q_{j + 1}, \sigma)) & \text{à nouveau par propriété de $\varphi$} \\
+        \end{align*}
+        Le résultat est clairement similaire avec $\psi$, si on suppose $\psi(q_j) = \psi(q_{j + 1})$. \newline
+        Ainsi en définissant la suite $\Delta_0,\Delta_1, ..., \Delta_k$, avec $\forall j \in \llbracket 0 ; k \rrbracket, \; \Delta_j = \delta_\mathcal{B}(q_j, \sigma)$, alors
+        \begin{equation*}
+            \forall \: 0 \leq j < k, \; \varphi(\Delta_j) = \varphi(\Delta_{j + 1}) \text{ ou } \psi(\Delta_j) = \psi(\Delta_{j + 1}) \text{ (d'après ce qu'on vient de montrer).}
+        \end{equation*}
+        D'où le résultat : $\boxed{\delta_\mathcal{B}(p, \sigma) \equiv \delta_\mathcal{B}(q, \sigma)}$ .
+        \item Soit $(p, q) \in Q_\mathcal{B}^2$ tel que $p \equiv q$. Par symétrie de la relation $\equiv$, montrer que $ p \in F_\mathcal{B} \implies q \in F_\mathcal{B}$ suffira à montrer l'équivalence. \newline 
+        Soit $p = q_0, q_1, ..., q_k = q$ la suite associée à $\equiv$. \newline
+        Soit $j \in \llbracket 0;k \llbracket$. Si $\varphi(q_j) = \varphi(q_{j + 1})$, montrons que $q_j \in F_\mathcal{B} \implies q_{j + 1} \in F_\mathcal{B}$ : 
+        \begin{equation*}
+            q_j \in F_\mathcal{B} \implies \varphi(q_j) = \varphi(q_{j + 1}) \in F_\mathcal{A} \implies q_{j + 1} \in F_\mathcal{B} \;\; \text{(par propriété de morphisme de $\varphi$)}
+        \end{equation*}
+        Le résultat est clairement similaire avec $\psi$, si on suppose $\psi(q_j) = \psi(q_{j + 1})$. \newline
+        Et donc, par une récurrence immédiate, $p \in F_\mathcal{B} \implies q \in F_\mathcal{B}$ et ainsi $\boxed{p \in F_\mathcal{B} \Longleftrightarrow q \in F_\mathcal{B}}$
+
+        \item 
+\end{enumerate}
 \end{document}
