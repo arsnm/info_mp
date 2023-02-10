@@ -3,8 +3,13 @@
 Travaux d'informatique en CPGE, en classe de MP* à la Martinière Monplaisir
 
 - [Option Informatique](infoOpt)
+    - [Cours](infoOpt/cours/)
+    - [Exercices/TD](infoOpt/exos/), [TP](infoOpt/tp)
+    - [DM](infoOpt/dm/)
 
 - [Informatique Tronc Commun](infoTC)
+    - [Cours](infoTC/cours/)
+    - [Exercices/TD](infoTC/exos/), [TP](infoTC/tp)
 
 ## Quelques fichiers utiles:
 
