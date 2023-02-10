@@ -97,7 +97,7 @@
     \item $\boxed{L(A_1) = (a \cdot a|b \cdot b|a \cdot b|b \cdot a)^* \cdot (a|b)}$
     \item $\boxed{L(A_1) = (a|b \cdot a^* \cdot b)^*\cdot b\cdot a^*}$
     \item \begin{minted}{ocaml}
-    let a2 = 2, [|0, 1 ; 1, 0|], [|false; true|]  ;;
+    let a2 = 2, [|(0, 1) ; (1, 0)|], [|false; true|]  ;;
     \end{minted}
 \end{enumerate}
 
@@ -109,7 +109,7 @@
     \item \begin{minted}{ocaml}
     let numero n a =
         let t = Array.make n (-1) in
-        let rec aux index = function (*parcours la liste*)
+        let rec aux index = function (*parcourt la liste*)
           |[] -> ()
           |h::q -> t.(h) <- index ; aux (index + 1) q in
         aux 0 a ; t ;;
@@ -128,11 +128,12 @@
                 let succ_a, succ_b = delta.(etat) in
                 aux succ_a ;
                 aux succ_b
-                end in 
+                end 
+        in 
         aux 0 ;;
         List.rev !parcours
     \end{minted}
-    \underline{Compl\'exit\'e} : La création d'une \verb|Array| de taille $n$ est en $O(n)$, et l'accés à un élément d'une liste, tout comme la concatenation d'un élément avec une liste, sont en $O(1)$. On ne s'intéresse donc qu'aux appels récursifs de la fonction \verb|aux|. Comme $|Q| = n$, et que pour tout $q \in Q$, il existe deux \'etats $q_1$ et $q_2$ (potentiellement égaux) tels que $\delta(q, a) = q_1$ et $\delta(q, b) = q_2$, la fonction \verb|aux| fait au plus $2^n$ appels récursifs, soit une compléxité en $\boxed{O(2^n)}$.
+    \underline{Compl\'exit\'e} : La création d'une \verb|Array| de taille $n$ est en $O(n)$, et l'accès à un élément d'une liste, tout comme la concatenation d'un élément avec une liste, sont en $O(1)$. On ne s'intéresse donc qu'aux appels récursifs de la fonction \verb|aux|. Comme $|Q| = n$, et que pour tout $q \in Q$, il existe deux \'etats $q_1$ et $q_2$ (potentiellement égaux) tels que $\delta(q, a) = q_1$ et $\delta(q, b) = q_2$, la fonction \verb|aux| fait au plus $2n$ appels récursifs, soit une compléxité en $\boxed{O(n)}$.
 
     \item \begin{minted}{ocaml}
     let partie_accessible aut = 
@@ -148,7 +149,8 @@
                     new_f.(s) <- f.(h);
                     let succ_a, succ_b = delta.(h) in
                     new_delta.(s) <- apparition.(succ_a) ,apparition.(succ_b);
-                    aux t in
+                    aux t 
+        in
         aux new_etats ;;
     \end{minted}
 
@@ -187,22 +189,22 @@
         \hline
     \end{tabular}
 
-    \item Supposons qu'il existe un morphisme d'automate $\varphi  : \mathcal{A}_1 \rightarrow \mathcal{A}_2$, alors, pour vérifier $(2)$ : $\varphi(A) = B$, et pour vérifier $(4)$ : $\varphi(B) = D$. Or si $\varphi$ est un morphisme d'automates, alors d'après $(3)$,
+    \item Supposons qu'il existe un morphisme d'automates $\varphi  : \mathcal{A}_1 \rightarrow \mathcal{A}_2$, alors, pour vérifier $(2)$ : $\varphi(A) = C$, et pour vérifier $(4)$ : $\varphi(B) = D$. Or si $\varphi$ est un morphisme d'automates, alors d'après $(3)$,
     \begin{eqnarray*}
         \varphi(\delta_{\mathcal{A}_1}(A, a)) & = & \varphi(B) \\
         & = & D \\
         & = & \delta_{\mathcal{A}_2}(\varphi(A), a)
     \end{eqnarray*}
-    Mais, $\varphi(A) = C$ d'après $(1)$, donc 
+    Mais, $\varphi(A) = C$ d'après $(2)$, donc 
     \begin{eqnarray*}
         \delta_{\mathcal{A}_2}(\varphi(A), a) & = & \delta_{\mathcal{A}_2}(C, a) \\
-        & = & D \\
-        & = & C \\ 
+        & = & C \\
+        & = & D \\ 
         & \rightarrow & \text{\underline{Absurde !}}
     \end{eqnarray*}
     Ainsi, \fbox{il n'existe pas de morphisme d'automates de $\mathcal{A}_1$ vers $\mathcal{A}_2$}.
 
-    \item Comme à la question précédente, supposons qu'il existe un morphisme d'automate $\varphi  : \mathcal{A}_5 \rightarrow \mathcal{A}_2$, alors $(2)$ et $(4)$ nous donne : $\varphi(L) = C$, $\varphi(M) = D$ et $\varphi(N) = C$ (car $N \notin F_{\mathcal{A}_5}$). $(3)$ impose alors, 
+    \item Comme à la question précédente, supposons qu'il existe un morphisme d'automates $\varphi  : \mathcal{A}_5 \rightarrow \mathcal{A}_2$, alors $(2)$ et $(4)$ nous donne : $\varphi(L) = C$, $\varphi(M) = D$ et $\varphi(N) = C$ (car $N \notin F_{\mathcal{A}_5}$). $(3)$ impose alors, 
     \begin{eqnarray*}
         \varphi(\delta_{\mathcal{A}_5}(N, b)) & = & \varphi(L) \\
         & = & C \\
@@ -225,31 +227,32 @@
     \underline{Initialisation} : Si $n = 0$, alors $m (= \varepsilon)$ est le mot vide, alors pour tout état $q$, \newline
     $\delta_\mathcal{A}^*(q, \varepsilon) = q$ et $\delta_\mathcal{B}^*(\varphi(q), \varepsilon) = \varphi(q)$ donc $\varphi(\delta_\mathcal{A}^*(q, \varepsilon)) = \varphi(q) = \delta_\mathcal{B}^*(\varphi(q), \varepsilon)$. \\[2mm]
     \underline{Hérédité} : Soit $n \in \bb{N}$, supposons $\mathcal{P}(n)$, montrons $\mathcal{P}(n) \Rightarrow \mathcal{P}(n + 1)$, \newline
-    Soit $q \in Q_\mathcal{A}$ un état quelconque et $m$ un mot de taille $n + 1$, on peut alors noter $m = \sigma m_r$ où $m_r$ est un mot de taille $n$. Ainsi, \begin{eqnarray*}
+    Soit $q \in Q_\mathcal{A}$ un état quelconque et $m$ un mot de taille $n + 1$, on peut alors noter $m = \sigma m_r$ où $m_r$ est un mot de taille $n$, et $\sigma$ une lettre dans $\{a, b\}$. Ainsi, \begin{eqnarray*}
         \varphi(\delta_\mathcal{A}^*(q, m)) & = & \varphi(\delta_\mathcal{A}^*(\delta_\mathcal{A}(q, \sigma), m_r)) \text{ par définition de } \delta^*_\mathcal{A} \\
         & = & \delta_\mathcal{B}^*(\varphi(\delta_\mathcal{A}(q, \sigma)), m_r) \text{ par l'hypothèse de récurrence} \\
         & = & \delta_\mathcal{B}^*(\delta_\mathcal{B}(\varphi(q), \sigma), m_r) \text{ par la propriété $(3)$ d'un morphisme d'automates} \\
         & = & \delta_\mathcal{B}^*(\varphi(q), m) \text{ par définition de } \delta^*_\mathcal{B} 
     \end{eqnarray*}
-    Donc $\forall n \in \bb{N}$, $\mathcal{P}(n)$ est vérifié. Ainsi, si $m \in L(\mathcal{A})$, alors $\delta^*_\mathcal{A}(i_\mathcal{A}, m) \in F_\mathcal{A}$, et donc $\varphi(\delta^*_\mathcal{A}(i_\mathcal{A}, m)) = \delta_\mathcal{B}^*(\varphi(i_\mathcal{A}), m)  = \delta_\mathcal{B}^*(i_\mathcal{B}, m) \in F_\mathcal{B}$ d'après ce que l'on vient de montrer, $(2)$ et $(4)$. Donc $\delta^*_\mathcal{B}(i_\mathcal{B}, m) \in F_\mathcal{B}$, et par conséquent $m \in L(\mathcal{B})$. \fbox{D'où le résultat}.
-    \item \label{itm:isomorphisme} Soit $\mathcal{A}, \mathcal{B}$ deux automates \textbf{finies}, tels que $|Q_\mathcal{A}| = |Q_\mathcal{B}|$. Supposons qu'il existe un morphisme d'automates $\varphi : \mathcal{A} \rightarrow \mathcal{B}$, alors $\varphi$ est surjective par définition. Or comme $|Q_\mathcal{A}| = |Q_\mathcal{B}|$, $\varphi \text{ surjective} \Leftrightarrow \varphi \text{ bijective}$. Donc \fbox{$\varphi$ est nécessairement bijective}. \newline
+    Donc $\forall n \in \bb{N}$, $\mathcal{P}(n)$ est vérifié. \newline 
+    Ainsi, si $m \in L(\mathcal{A})$, alors $\delta^*_\mathcal{A}(i_\mathcal{A}, m) \in F_\mathcal{A}$, et donc $\varphi(\delta^*_\mathcal{A}(i_\mathcal{A}, m)) = \delta_\mathcal{B}^*(\varphi(i_\mathcal{A}), m)  = \delta_\mathcal{B}^*(i_\mathcal{B}, m) \in F_\mathcal{B}$ d'après ce que l'on vient de montrer, $(2)$ et $(4)$. Donc $\delta^*_\mathcal{B}(i_\mathcal{B}, m) \in F_\mathcal{B}$, et par conséquent $m \in L(\mathcal{B})$. \fbox{D'où le résultat}.
+    \item \label{itm:isomorphisme} Soit $\mathcal{A}, \mathcal{B}$ deux automates \textbf{finis}, tels que $|Q_\mathcal{A}| = |Q_\mathcal{B}|$. Supposons qu'il existe un morphisme d'automates $\varphi : \mathcal{A} \rightarrow \mathcal{B}$, alors $\varphi$ est surjective par définition. Or comme $|Q_\mathcal{A}| = |Q_\mathcal{B}|$, $\varphi \text{ surjective} \Leftrightarrow \varphi \text{ bijective}$. Donc \fbox{$\varphi$ est nécessairement bijective}. \newline
     De plus: \begin{itemize}
-        \item $\varphi^{-1}$ est bijective donc surjective $(1)$
-        \item $\varphi^{-1}(i_\mathcal{B}) = \varphi^{-1}(\varphi(i_\mathcal{B})) = i_\mathcal{A}$ $(2)$
-        \item Soit $q \in F_\mathcal{B}$, d'après la définition de $\varphi, \forall \sigma \in \{ a, b\}$, $\varphi(\delta_\mathcal{A}(\varphi^{-1}(q), \sigma)) = \delta_\mathcal{B}(q, \sigma)$, et donc en appliquant $\varphi^{-1}$ à l'égalité : \newline
-        $\forall q \in Q_\mathcal{B}$, $\forall \sigma \in \{ a, b\}$, $ \varphi^{-1}(\delta_\mathcal{B}(q, \sigma)) = \delta_\mathcal{A}(\varphi^{-1}(q), \sigma)$ $(3)$
-        \item $\forall q \in Q_\mathcal{B}$, (encore une fois d'après la définition de $\varphi$), \begin{eqnarray*}
+        \item[(1)] $\varphi^{-1}$ est bijective donc surjective ;
+        \item[(2)]  $\varphi^{-1}(i_\mathcal{B}) = \varphi^{-1}(\varphi(i_\mathcal{B})) = i_\mathcal{A}$ ;
+        \item[(3)]  Soit $q \in F_\mathcal{B}$, d'après la définition de $\varphi, \forall \sigma \in \{ a, b\}$, $\varphi(\delta_\mathcal{A}(\varphi^{-1}(q), \sigma)) = \delta_\mathcal{B}(q, \sigma)$, et donc en appliquant $\varphi^{-1}$ à l'égalité :
+        $$ \forall q \in Q_\mathcal{B}, \; \forall \sigma \in \{ a, b\}, \; \varphi^{-1}(\delta_\mathcal{B}(q, \sigma)) = \delta_\mathcal{A}(\varphi^{-1}(q), \sigma) $$
+        \item[(4)]  $\forall q \in Q_\mathcal{B}$, (encore une fois d'après la définition de $\varphi$), \begin{eqnarray*}
             \varphi^{-1}(q) \in F_\mathcal{A} & \Longleftrightarrow & \varphi(\varphi^{-1}(q)) \in F_\mathcal{B} \\
-            & \Longleftrightarrow & q \in F_\mathcal{B} \text{ $(4)$}
+            & \Longleftrightarrow & q \in F_\mathcal{B}
         \end{eqnarray*}
     \end{itemize}
     Donc \fbox{$\varphi^{-1}$ est bien un morphisme d'automates}.
     \item \label{itm:composition} Soit $\mathcal{A}, \mathcal{B}, \mathcal{C}$ trois automates et  $\varphi : \mathcal{B} \rightarrow \mathcal{C}$,  $\psi : \mathcal{A} \rightarrow \mathcal{B}$ deux morphismes d'automates.
     \begin{itemize}
-        \item $\varphi$ et $\psi$ surjectives donc $\varphi \circ \psi$ est surjective $(1)$
-        \item $(\varphi \circ \psi)(i_\mathcal{A}) = \varphi(i_\mathcal{B}) = i_\mathcal{C}$ $(2)$
-        \item  $\forall q \in Q_\mathcal{A}$, $\forall \sigma \in \{ a, b\}$, $(\varphi \circ \psi)(\delta_\mathcal{A}(q, \sigma)) = \varphi(\delta_\mathcal{B}(\psi(q), \sigma)) = \delta_\mathcal{A}((\varphi \circ \psi)(q), \sigma)$ $(3)$
-        \item $\forall q \in Q_\mathcal{A}$, $q \in F_\mathcal{A} \Longleftrightarrow \psi(q) \in F_\mathcal{B} \Longleftrightarrow (\varphi \circ \psi)(q) \in F_\mathcal{C}$ $(4)$
+        \item[(1)]  $\varphi$ et $\psi$ surjectives donc $\varphi \circ \psi$ est surjective ;
+        \item[(2)]  $(\varphi \circ \psi)(i_\mathcal{A}) = \varphi(i_\mathcal{B}) = i_\mathcal{C}$ ;
+        \item[(3)]  $\forall q \in Q_\mathcal{A}$, $\forall \sigma \in \{ a, b\}$, $(\varphi \circ \psi)(\delta_\mathcal{A}(q, \sigma)) = \varphi(\delta_\mathcal{B}(\psi(q), \sigma)) = \delta_\mathcal{A}((\varphi \circ \psi)(q), \sigma)$ ;
+        \item[(4)]  $\forall q \in Q_\mathcal{A}$, $q \in F_\mathcal{A} \Longleftrightarrow \psi(q) \in F_\mathcal{B} \Longleftrightarrow (\varphi \circ \psi)(q) \in F_\mathcal{C}$ ;
     \end{itemize}
     Donc $\varphi \circ \psi : \mathcal{A} \rightarrow \mathcal{C}$ est un morphisme d'automates, \fbox{d'où le résultat}.
 \end{enumerate}
@@ -259,7 +262,7 @@
 \begin{enumerate}
     \setcounter{enumi}{15}
     
-    \item \label{itm:accessible} Soit $\mathcal{A}, \mathcal{B}$ deux automates \textbf{accessibles}, soit $\varphi : \mathcal{A} \rightarrow \mathcal{B}$ une application verifiant les propriétés $(2)$, $(3)$ et $(4)$. Le résulat montré par récurrence à la question \ref{itm:rec1}. est toujours valable puisque les seuls hypothèses utilisées ($(2)$, $(3)$ et $(4)$) sont vérfiées. \newline
+    \item \label{itm:accessible} Soit $\mathcal{A}, \mathcal{B}$ deux automates \textbf{accessibles}, soit $\varphi : \mathcal{A} \rightarrow \mathcal{B}$ une application verifiant les propriétés $(2)$, $(3)$ et $(4)$. Le résulat montré par récurrence à la question \ref{itm:rec1}. est toujours valable puisque les seules hypothèses utilisées ($(2)$, $(3)$ et $(4)$) sont vérfiées. \newline
     Soit $q \in Q_\mathcal{B}$, comme $q$ est accesible, il existe $m \in L(\mathcal{B})$ tel que :
     \begin{eqnarray*}
         \delta^*_\mathcal{B}(i_\mathcal{B}, m) & = & q \\
@@ -350,7 +353,8 @@
         & = & (\delta_\mathcal{A}^*(\delta_\mathcal{A}(q, \sigma), m_r),\delta_{\mathcal{A}'}^*(\delta_{\mathcal{A}'}(q', \sigma), m_r)) \text{ d'après l'hypothèse de récurrence} \\
         & = & (\delta_\mathcal{A}^*(q, m),\delta_{\mathcal{A}'}^*(q',  m)) \text{ par définition de $\delta_\mathcal{A}^*$ et $\delta_{\mathcal{A}'}^*$}
     \end{eqnarray*}
-    Donc $\forall n \in \bb{N}$, $\mathcal{P}(n)$ est vérifié. Ainsi, si $(q, q') \in Q_\mathcal{A} \times Q_{\mathcal{A}'}$ est un état accessible, alors il existe $m$ tel que $(q, q') = \delta_{\mathcal{A} \times \mathcal{A}'}^*((i_\mathcal{A}, i_{\mathcal{A}'}), m) = (\delta_\mathcal{A}^*(i_\mathcal{A}, m),\delta_{\mathcal{A}'}^*(i_\mathcal{A'}, m))$.\newline 
+    Donc $\forall n \in \bb{N}$, $\mathcal{P}(n)$ est vérifié. \newline
+    Ainsi, si $(q, q') \in Q_\mathcal{A} \times Q_{\mathcal{A}'}$ est un état accessible, alors il existe un mot $m$ tel que $(q, q') = \delta_{\mathcal{A} \times \mathcal{A}'}^*((i_\mathcal{A}, i_{\mathcal{A}'}), m) = (\delta_\mathcal{A}^*(i_\mathcal{A}, m),\delta_{\mathcal{A}'}^*(i_\mathcal{A'}, m))$.\newline 
     Or comme $L(\mathcal{A}) = L(\mathcal{A}')$, $m \in L(\mathcal{A}) \Longleftrightarrow  m \in L(\mathcal{A'})$.  \fbox{D'où $q \in F_\mathcal{A} \Longleftrightarrow q' \in F_\mathcal{A'}$}.
 
     \item \label{itm:produit} Soit $\mathcal{A}, \mathcal{A}'$ deux automates accessibles qui acceptent le même langage. On considère $\mathcal{B}$ la partie accessible de $\mathcal{A} \times \mathcal{A'}$. \newline
@@ -361,14 +365,13 @@
         \end{array}$. \newline
     D'après la question \ref{itm:accessible}, comme $\mathcal{B}$ et $\mathcal{A}$ sont deux automates accessibles, il suffit de montrer que $\varphi$ vérifie $(2)$, $(3)$ et $(4)$ :
     \begin{itemize}
-        \item Comme $i_\mathcal{B} = (i_\mathcal{A}, i_\mathcal{A'})$, on a directement $\varphi(i_\mathcal{B}) = i_\mathcal{A}$, ce qui montre que $\varphi$ vérifie $(2)$
-        \item Si $(q, q') \in Q_\mathcal{B}$, alors pour tout $\sigma \in \{a, b \}$, on a à la fois $\varphi(q, q') = q$ par définition de $\varphi$ et $\varphi(\delta_\mathcal{B}((q, q'), \sigma)) = \varphi(\delta_\mathcal{A}(q, \sigma), \delta_\mathcal{A'}(q', \sigma)) = \delta_\mathcal{A}(q, \sigma)$. Donc $\varphi$ vérifie $(3)$.
-        \item Enfin, soit $(q, q') \in Q_\mathcal{B}$ : 
+        \item[(2)] Comme $i_\mathcal{B} = (i_\mathcal{A}, i_\mathcal{A'})$, on a directement $\varphi(i_\mathcal{B}) = i_\mathcal{A}$ ;
+        \item[(3)] Si $(q, q') \in Q_\mathcal{B}$, alors pour tout $\sigma \in \{a, b \}$, on a à la fois $\varphi(q, q') = q$ par définition de $\varphi$ et $\varphi(\delta_\mathcal{B}((q, q'), \sigma)) = \varphi(\delta_\mathcal{A}(q, \sigma), \delta_\mathcal{A'}(q', \sigma)) = \delta_\mathcal{A}(q, \sigma)$ ;
+        \item[(4)] Enfin, soit $(q, q') \in Q_\mathcal{B}$ : 
             \begin{itemize}
                 \item[($\Rightarrow$)] Si $(q, q') \in F_\mathcal{B}$, par définition de $\mathcal{B}$, $\varphi(q, q') = q \in F_\mathcal{A}$ ;
                 \item[($\Leftarrow$)] Si $\varphi(q, q') = q \in F_\mathcal{A}$, alors d'après la question \ref{itm:rec2}, $q' \in F_\mathcal{A'}$, et donc $(q, q') \in F_\mathcal{B}$ ; 
             \end{itemize}
-            Donc $\varphi$ vérifie également $(4)$
     \end{itemize}
     Ainsi, on démontre bien \fbox{l'existence d'un morphisme d'automates entre $\mathcal{B}$ et $\mathcal{A}$}. \newline
     \fbox{La symétrie du problème entre $\mathcal{A}$ et $\mathcal{A'}$} permet de conclure.
@@ -392,7 +395,7 @@
             Alors en considérant la suite de taille $ k + 1 $ (où $ k = (\ell + m) \in \bb{N}$) constituée des termes \newline
             $p = q_0, q_1, ... , q_\ell = r_0, r_1, ... , r_m = r$, on a clairement :
             \begin{align*} \forall \: 0 \leq j < k, \; \varphi(p_j) = \varphi(p_{j + 1}) \text{ ou } \psi(p_j) = \psi(p_{j + 1}) \text{\footnotesize{(même lorsque $j = \ell$ puisque $\varphi(q_\ell) = \varphi(r_0) = \varphi(r_1)$)}} \end{align*}
-            Donc $p \equiv q \land q \equiv r \implies p \equiv r$, ce qui conclut sur la \fbox{transitivité de $\equiv$}.
+            Donc $(p \equiv q) \land (q \equiv r) \implies p \equiv r$, ce qui conclut sur la \fbox{transitivité de $\equiv$}.
         \end{itemize}
         On a ainsi montré que \fbox{$\equiv$ est une relation d'équivalence}.
 
@@ -461,7 +464,7 @@
                 & \Longleftrightarrow \psi'(q) \in F_\mathcal{C} & \text{car $\psi'(q) = [p]$ par construction} 
             \end{align*}
     \end{itemize}
-    Donc $\psi'$ ainsi construit est bien un morphisme d'automates de $\mathcal{A'}$ vers $\mathcal{C}$. En procédant de même avec $\varphi'$, en remplacant $\mathcal{A'}$ par $\mathcal{A}$, on \fbox{construit bien $\varphi'$ et $\psi'$ deux tels morphismes}.
+    Donc $\psi'$, ainsi construit, est bien un morphisme d'automates de $\mathcal{A'}$ vers $\mathcal{C}$. En procédant de même avec $\varphi'$, en remplacant $\mathcal{A'}$ par $\mathcal{A}$, on \fbox{construit bien $\varphi'$ et $\psi'$ deux tels morphismes}.
     \item 
     \begin{minted}[breaklines]{ocaml}
     let maxi_positif arr = (*renvoie l'element maximum d'un tableau d'entiers positifs (et -1 si la liste est vide)*)
@@ -489,7 +492,7 @@
         done;
         res ;;
     \end{minted}
-    La fonction \verb|maxi_positif| à une complexité linéaire en $\ell$, et la fonction \verb|renomme| effectue une boucle fort comportant $n$ étapes (où $n$ est la taille du tableau donné en arguement). Les fonctions \verb|Array.make| sont aussi de complexité linéaire en $n$ pour \verb|res| et $\ell$ pour \verb|index|. \newline 
+    La fonction \verb|maxi_positif| à une complexité linéaire en $\ell$, et la fonction \verb|renomme| effectue une boucle \verb|for| comportant $n$ étapes (où $n$ est la taille du tableau donné en arguement). Les fonctions \verb|Array.make| sont aussi de complexité linéaire en $n$ pour \verb|res| et $\ell$ pour \verb|index|. \newline 
     Ainsi la fonction \cprotect\fbox{\verb|renomme| a une complexité en $O(\max(\ell, n))$}.
 
     \item 
@@ -595,7 +598,7 @@
         }
         \end{minipage}
     
-    Afin de pouvoir créer un morphisme $\varphi$ de $\mathcal{A}_6$ vers $\mathcal{A}_6^{O, P}$, il faut aussi que l'on fussionne les états $Q$ et $T$ afin d'avoir les bonnes transitions par $b$. On peut alors représenter $\varphi$ par \begin{tabular}{|c|c|}
+    Afin de pouvoir créer un morphisme $\varphi$ de $\mathcal{A}_6$ vers $\mathcal{A}_6^{O, P}$, il faut aussi que l'on fusionne les états $Q$ et $T$ afin d'avoir les bonnes transitions par $b$. On peut alors représenter $\varphi$ par \begin{tabular}{|c|c|}
         \hline
         $q$ & $\psi'(q)$ \\
         \hline
@@ -611,7 +614,7 @@
         \hline
         $T$ & $Q, T$ \\
         \hline
-    \end{tabular}
+    \end{tabular}.
     Ainsi, on a bien $\varphi(O) = \varphi(P)$ et $|Q_{\mathcal{A}_6^{O, P}}| < |Q_{\mathcal{A}_6}|$
 
     \item Les transitions des états $Q$ et $R$ selon $b$ dans $\mathcal{A}_6$ sont respectivment $O \in F_{\mathcal{A}_6}$ et $S \notin F_{\mathcal{A}_6}$. Ainsi par les propriétés $(3)$ et $(4)$ de morphisme de $\psi$, \fbox{il n'est pas possible d'avoir un tel $\mathcal{A}_6^{Q, R}$}.
@@ -649,8 +652,8 @@
         tab ;;
     \end{minted}
 
-    \item On considère le graphe orienté $P'$ similaire à $P$ mais où l'orientation des arcs est inversée (i.e que pour tous $(p, q) \in Q \times Q$ et pour toute lettres $\sigma \in \{a , b \}$ les arcs vont de $(\delta(p, \sigma), \delta(q, \sigma))$ vers $(p, q)$). En faisant une fonction \verb|de_predecesseurs_bis|, simillaire à la fonction de la question \ref{itm:tabPredecesseurs}. mais pour le graphe $P'$, on aura alors \verb|tab.(p).(q) = false|  si et seulement si pour tout mot $m \in L(\mathcal{A})$, ($\delta_\mathcal{A}^*(p, m) \in F_\mathcal{A}$ et $\delta_\mathcal{A}^*(q, m) \in F_\mathcal{A}$) ou ($\delta_\mathcal{A}^*(p, m) \notin F_\mathcal{A}$ et $\delta_\mathcal{A}^*(q, m) \notin F_\mathcal{A}$). On dira que $p$ est en relation avec $q$ (et on notera cette relation $\star$). \newline
-    Cette relation est clairement refléxive, symétrique et transitive, $\star$ est donc une relation d'equivalence. Ainsi pour réduire l'automate $\mathcal{A}$ on va déterminer les classes d'équivalence de la relation $\star$, et fusionner les états appartenant à chacune des classes. Pour ce faire, on determinera un morphisme $\varphi$ entre $\mathcal{A}$ et l'automate dont les états sont les classes d'équivalence de $\star$ (même procédé qu'à la question \ref{itm:construMorphisme}.), pour ensuite calculer l'image par $\varphi$ de $\mathcal{A}$ pour \fbox{obtenir $\mathcal{M}_L$}.
+    \item On considère le graphe orienté $P'$ similaire à $P$, mais où l'orientation des arcs est inversée (i.e que pour tout $(p, q) \in Q \times Q$ et pour toute lettre $\sigma \in \{a , b \}$ les arcs vont de $(\delta(p, \sigma), \delta(q, \sigma))$ vers $(p, q)$). En faisant une fonction \verb|table_de_predecesseurs_bis|, simillaire à la fonction de la question \ref{itm:tabPredecesseurs}. mais pour le graphe $P'$, on aura alors \verb|tab.(p).(q) = false|  si et seulement si pour tout mot $m \in L(\mathcal{A})$, ($\delta_\mathcal{A}^*(p, m) \in F_\mathcal{A}$ et $\delta_\mathcal{A}^*(q, m) \in F_\mathcal{A}$) ou ($\delta_\mathcal{A}^*(p, m) \notin F_\mathcal{A}$ et $\delta_\mathcal{A}^*(q, m) \notin F_\mathcal{A}$). On dira que $p$ est en relation avec $q$ (et on notera cette relation $\star$). \newline
+    Cette relation est clairement refléxive, symétrique et transitive, $\star$ est donc une relation d'equivalence. Ainsi pour réduire l'automate $\mathcal{A}$ on va déterminer les classes d'équivalence de la relation $\star$, et fusionner les états appartenant à chacune des classes. Pour ce faire, on determinera un morphisme $\varphi$ entre $\mathcal{A}$ et l'automate dont les états sont les classes d'équivalence de $\star$ (même procédé qu'à la question \ref{itm:construMorphisme}.), pour ensuite calculer l'image de $\mathcal{A}$ par $\varphi$ pour \fbox{obtenir $\mathcal{M}_L$}.
 
     \begin{minted}[breaklines]{ocaml}
     let table_de_predecesseurs_bis aut = 
@@ -714,15 +717,20 @@
         (new_n, new_delta, new_f) ;;
     \end{minted}
 
-    \textit{Exemple : en testant nos fonctions avec $\mathcal{A}_6$, on retrouve bien $\mathcal{M}_{L_6}$ :} \newline
+    \textit{Exemple : en testant ces fonctions avec $\mathcal{A}_6$, on retrouve bien $\mathcal{M}_{L_6}$ :}
     \begin{minted}[breaklines]{ocaml}
-        INPUT :
-        let a6 = let a6 = 6, [|(0, 2) ; (0, 5); (3, 1); (2, 4); (5, 4); (3, 0)|], [|true ; true ; false ; false ; false ; false|] in
-        reduit a6 ;;
+INPUT :
+let a6 = 6, [|(0, 2) ; (0, 5); (3, 1); (2, 4); (5, 4); (3, 0)|], [|true ; true ; false ; false ; false ; false|] in
+reduit a6 ;;
 
-        OUTPUT : 
-        - : int * (int * int) array * bool array =
-        (3, [|(0, 1); (2, 0); (1, 2)|], [|true; false; false|])
+OUTPUT : 
+- : int * (int * int) array * bool array =
+(3, [|(0, 1); (2, 0); (1, 2)|], [|true; false; false|])
     \end{minted}
 \end{enumerate}
+
+\null
+\begin{center}
+        F\footnotesize{IN DE LA COPIE}
+    \end{center}
 \end{document}
