@@ -1,0 +1,27 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usetikzlibrary{automata,positioning}
+
+\begin{document}
+  \begin{tikzpicture}[%
+    >=stealth,
+    shorten >=1pt,
+    node distance=3cm,
+    on grid,
+    auto,
+    state/.append style={minimum size=2em},
+    thick
+  ]
+    \node[state, initial, initial text = {}, accepting] (A) {$O, P$};
+    \node[state] (B) [right of=A] {$Q, T$};
+    \node[state] (C) [right of=B] {$R, S$};
+
+    \path[->] (A) +(-1,0) edge (A)
+              (A)         edge [loop above] node {$a$} (A)
+              (A)         edge [bend left]  node {$b$} (B)
+              (B)         edge [bend left]  node {$a$} (C)
+              (B)         edge [bend left] node {$b$} (A)
+              (C)         edge [bend left]  node {$a$} (B)
+              (C)         edge [loop above]  node {$b$} (C);
+  \end{tikzpicture}
+\end{document}
