@@ -32,6 +32,7 @@
 }}
 \renewcommand{\thesection}{\Roman{section}} % Roman numerals for sections
 \setlength{\headheight}{12.5pt}
+\graphicspath{{./img}}
 \newcommand{\image}[3]{ %command to insert image
     \begin{minipage}[t]{\linewidth}
         #1
@@ -73,7 +74,7 @@
 \section{Algorithmes de d\'eterminisation}
 
 \begin{enumerate}
-    \item \image{}{0.5}{img/I-1.jpeg}
+    \item \image{}{0.5}{I-1/I-1.pdf}
     \item $L = a((b|a)bb^*a)^*$
 \end{enumerate}
 
@@ -82,8 +83,8 @@
 \begin{enumerate}
     \item \begin{itemize}
         \item[] Soit $A = (\Sigma, Q, I, F, \delta)$ tq $L = L(A)$
-        \item[] Soit $A' = (\Sigma, Q, F, I \delta')$ où $\delta'(q, a) = \{ q |  \delta(q', a) = q \}$
-        \item[] \image{}{0.2}{img/II-1.jpeg}
+        \item[] Soit $A' = (\Sigma, Q, I, F, \delta')$ où $\delta'(q, a) = \{ q' |  \delta(q', a) = q \}$
+        \item[] \image{}{0.2}{II-1/II-1.pdf}
         \item Mq : $m \in L(\tilde A) \Leftrightarrow ... \Leftrightarrow m \in \widetilde{L(A)}$
         \item[] $m = m_1...m_n \in L(\tilde A)$
         \item[] $\Leftrightarrow \exists \text{ chemin } q_0 \leftarrow q_1 ... \leftarrow q_n \text{ dans } \tilde A$
@@ -118,13 +119,13 @@
 \section{Reconnaissable ou non ?}
 
 \begin{enumerate}
-    \item \image{}{0.2}{img/III-1.jpeg} Ainsi, il existe un automate $A_1$ tel que $L(A_1) =L_1$ donc $L_1$ est reconnaissable.
-    \item \image{}{0.2}{img/III-2.jpeg} De même, il existe un automate $A_2$ tel que $L(A_2) =L_2$ donc $L_2$ est reconnaissable.
+    \item \image{}{0.2}{III-1/III-1.pdf} Ainsi, il existe un automate $A_1$ tel que $L(A_1) =L_1$ donc $L_1$ est reconnaissable.
+    \item \image{}{0.2}{III-2/III-2.pdf} De même, il existe un automate $A_2$ tel que $L(A_2) =L_2$ donc $L_2$ est reconnaissable.
     \item \begin{itemize}
         \item[] Même démo que pour $\{a^nb^n | n \in \bb{N}\}$ :
         \item[] $\{a^nb^n | n \in \bb{N}\} = L_3 \cap a^*b^* \implies L_3$ non reconnaissable.
     \end{itemize}
-    \item \image{}{0.8}{img/III-4.jpeg}
+    \item \image{\centering}{0.8}{III-4/III-4.pdf}
     \item \begin{itemize}
         \item[] Supposons $L_5$ reconnaissable,
         \item[] Soit $n$ l'entier donné par le Lemme de l'\'Etoile,

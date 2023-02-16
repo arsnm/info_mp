@@ -1,0 +1,23 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{amssymb}
+\usetikzlibrary{automata, positioning}
+
+\begin{document}
+\begin{tikzpicture}[%
+    >=stealth,
+    shorten >=1pt,
+    node distance=2cm,
+    on grid,
+    auto,
+    state/.append style={minimum size=2em},
+    thick
+  ]
+
+  \node[state, initial, initial text = {}, accepting] (A) {};
+  \node[state, initial right, initial text = {}, accepting] (B) [right of=A] {};
+  \path[->] 
+            (A) edge [bend left] node {$a$} (B)
+            (B) edge [bend left] node {$b$} (A);
+\end{tikzpicture}
+\end{document}
