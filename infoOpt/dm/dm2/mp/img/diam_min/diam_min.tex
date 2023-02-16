@@ -1,0 +1,16 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usetikzlibrary{graphs,graphs.standard,quotes}
+
+\begin{document}
+\begin{tikzpicture}
+  %See TikZ documentation! (Section 19, graphs)
+  \graph[circular placement, radius=3cm, group polar shift=(360/5:0),
+           nodes={circle,draw, minimum size=1cm}] {\foreach \x in {0,...,4} \x;
+  };
+  \foreach \x in {0,...,4} {
+    \foreach \y in {0,...,4} {
+          \draw(\x)--(\y);
+  }}
+\end{tikzpicture}
+\end{document}

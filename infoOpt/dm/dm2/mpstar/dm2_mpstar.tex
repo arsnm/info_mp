@@ -42,8 +42,8 @@
 
 %divers commands
 \newcommand{\bb}[1]{\mathbb{#1}}
-\newcommand{\encadrer}[1]{\fbox{color=red
-    \begin{minipage}{0.90\textwidth}
+\newcommand{\encadrer}[1]{\fcolorbox{red}{white}{
+    \begin{minipage}{\textwidth}
         #1
     \end{minipage}
 }}
@@ -106,7 +106,7 @@
 \begin{enumerate}
     \setcounter{enumi}{5}
 
-    \item \begin{minted}{ocaml}
+    \item \begin{minted}[frame=single]{ocaml}
     let numero n a =
         let t = Array.make n (-1) in
         let rec aux index = function (*parcourt la liste*)
@@ -115,7 +115,7 @@
         aux 0 a ; t ;;
     \end{minted}
 
-    \item \begin{minted}{ocaml}
+    \item \begin{minted}[frame=single]{ocaml}
     let etats_accessibles aut = 
         let n, delta, f = aut in 
         let visited = Array.make n false in
@@ -135,7 +135,7 @@
     \end{minted}
     \underline{Compl\'exit\'e} : La création d'une \verb|Array| de taille $n$ est en $O(n)$, et l'accès à un élément d'une liste, tout comme la concatenation d'un élément avec une liste, sont en $O(1)$. On ne s'intéresse donc qu'aux appels récursifs de la fonction \verb|aux|. Comme $|Q| = n$, et que pour tout $q \in Q$, il existe deux \'etats $q_1$ et $q_2$ (potentiellement égaux) tels que $\delta(q, a) = q_1$ et $\delta(q, b) = q_2$, la fonction \verb|aux| fait au plus $2n$ appels récursifs, soit une compléxité en $\boxed{O(n)}$.
 
-    \item \begin{minted}{ocaml}
+    \item \begin{minted}[frame=single]{ocaml}
     let partie_accessible aut = 
         let n, delta, f = aut in
         let new_etats = etats_accessibles aut in 
@@ -271,7 +271,7 @@
     \end{eqnarray*}
     Or, comme $\delta^*_\mathcal{A}(i_\mathcal{A}, m) \in Q_\mathcal{A}$, alors il existe $q' \in Q_\mathcal{A}$ tel que $\varphi(q') = q$ donc $\varphi$ est surjective, d'où $\boxed{\text{(automates accessibles)} \land (2) \land (3) \land (4) \implies (1)}$
     \item  
-    \begin{minted}[breaklines]{ocaml}
+    \begin{minted}[breaklines, frame=single]{ocaml}
     let existe_morphismes aut1 aut2 =
         let n1, delta1, f1 = aut1 in 
         let n2, delta2, f2 = aut2 in
@@ -321,7 +321,7 @@
         \captionof*{figure}{Partie accessible de $\mathcal{A}_3 \times \mathcal{A}_4$}\label{fig:fig1}
         \end{minipage}
 
-    \item \begin{minted}[breaklines]{ocaml}
+    \item \begin{minted}[breaklines, frame=single]{ocaml}
     let produit aut1 aut2 = 
         let n1, delta1, f1 = aut1 in 
         let n2, delta2, f2 = aut2 in 
@@ -466,7 +466,7 @@
     \end{itemize}
     Donc $\psi'$, ainsi construit, est bien un morphisme d'automates de $\mathcal{A'}$ vers $\mathcal{C}$. En procédant de même avec $\varphi'$, en remplacant $\mathcal{A'}$ par $\mathcal{A}$, on \fbox{construit bien $\varphi'$ et $\psi'$ deux tels morphismes}.
     \item 
-    \begin{minted}[breaklines]{ocaml}
+    \begin{minted}[breaklines, frame=single]{ocaml}
     let maxi_positif arr = (*renvoie l'element maximum d'un tableau d'entiers positifs (et -1 si la liste est vide)*)
         if Array.length arr = 0 then -1 else
         let value = ref arr.(0) in 
@@ -496,7 +496,7 @@
     Ainsi la fonction \cprotect\fbox{\verb|renomme| a une complexité en $O(\max(\ell, n))$}.
 
     \item 
-    \begin{minted}[breaklines]{ocaml}
+    \begin{minted}[breaklines, frame=single]{ocaml}
     let relation morph1 morph2 =
         let q_depart = Array.length morph1 in (*cardinal de l'automate de depart*)
         let q_arrive1 = maxi_positif morph1 + 1 in (*cardinal de l'automate image de phi*)
@@ -629,7 +629,7 @@
         \captionof*{figure}{Automate $\mathcal{M}_{L_6}$}\label{fig:fig4}
         \end{minipage}
     
-    \item \label{itm:tabPredecesseurs} \begin{minted}[breaklines]{ocaml}
+    \item \label{itm:tabPredecesseurs} \begin{minted}[breaklines, frame=single]{ocaml}
     let table_de_predecesseurs aut =
         let n, delta, f  = aut in 
         let tab = Array.make_matrix n n false in (*on initalise le tableau*)
@@ -655,7 +655,7 @@
     \item On considère le graphe orienté $P'$ similaire à $P$, mais où l'orientation des arcs est inversée (i.e que pour tout $(p, q) \in Q \times Q$ et pour toute lettre $\sigma \in \{a , b \}$ les arcs vont de $(\delta(p, \sigma), \delta(q, \sigma))$ vers $(p, q)$). En faisant une fonction \verb|table_de_predecesseurs_bis|, simillaire à la fonction de la question \ref{itm:tabPredecesseurs}. mais pour le graphe $P'$, on aura alors \verb|tab.(p).(q) = false|  si et seulement si pour tout mot $m \in L(\mathcal{A})$, ($\delta_\mathcal{A}^*(p, m) \in F_\mathcal{A}$ et $\delta_\mathcal{A}^*(q, m) \in F_\mathcal{A}$) ou ($\delta_\mathcal{A}^*(p, m) \notin F_\mathcal{A}$ et $\delta_\mathcal{A}^*(q, m) \notin F_\mathcal{A}$). On dira que $p$ est en relation avec $q$ (et on notera cette relation $\star$). \newline
     Cette relation est clairement refléxive, symétrique et transitive, $\star$ est donc une relation d'equivalence. Ainsi pour réduire l'automate $\mathcal{A}$ on va déterminer les classes d'équivalence de la relation $\star$, et fusionner les états appartenant à chacune des classes. Pour ce faire, on determinera un morphisme $\varphi$ entre $\mathcal{A}$ et l'automate dont les états sont les classes d'équivalence de $\star$ (même procédé qu'à la question \ref{itm:construMorphisme}.), pour ensuite calculer l'image de $\mathcal{A}$ par $\varphi$ pour \fbox{obtenir $\mathcal{M}_L$}.
 
-    \begin{minted}[breaklines]{ocaml}
+    \begin{minted}[breaklines, frame=single]{ocaml}
     let table_de_predecesseurs_bis aut = 
         let n, delta, f = aut in
         let tab = Array.make_matrix n n false in
@@ -720,9 +720,7 @@
     \textit{Exemple : en testant ces fonctions avec $\mathcal{A}_6$, on retrouve bien $\mathcal{M}_{L_6}$ :}
     \begin{minted}[breaklines]{ocaml}
 INPUT :
-let a6 = 6, [|(0, 2) ; (0, 5); (3, 1); (2, 4); (5, 4); (3, 0)|], [|true ; true ; false ; false ; false ; false|] in
-reduit a6 ;;
-
+let a6 = 6, [|(0, 2) ; (0, 5); (3, 1); (2, 4); (5, 4); (3, 0)|], [|true ; true ; false ; false ; false ; false|] in reduit a6 ;;
 OUTPUT : 
 - : int * (int * int) array * bool array =
 (3, [|(0, 1); (2, 0); (1, 2)|], [|true; false; false|])

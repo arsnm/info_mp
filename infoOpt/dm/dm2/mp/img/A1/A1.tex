@@ -1,0 +1,22 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usetikzlibrary{automata,positioning}
+
+\begin{document}
+  \begin{tikzpicture}[%
+    >=stealth,
+    shorten >=1pt,
+    node distance=3cm,
+    on grid,
+    auto,
+    state/.append style={minimum size=2em},
+    thick
+  ]
+    \node[state, initial, initial text = {}, accepting] (A) {};
+    \node[state, accepting] (B) [right of=A] {};
+
+    \path[->] (A) +(-1,0) edge (A)
+              (A)         edge []           node {$1$} (B)
+              (B)         edge [loop above] node {$0, 1$} (B);
+  \end{tikzpicture}
+\end{document}
