@@ -20,7 +20,7 @@
 {\thesection}{1em}{\ul{#1}}
 
 %code formatting
-\usepackage{minted}
+\usepackage[outputdir=.aux]{minted}
 \usemintedstyle{manni}
 
 %divers commands
@@ -75,7 +75,7 @@
 
 \begin{enumerate}
 
-\item \image{\raggedright}{0.6}{drawing/I_1.pdf}
+\item \image{\raggedright}{0.6}{img/I_1.pdf}
 
 \item
 
@@ -114,7 +114,7 @@
 
 La complexité est $O(n+m)$
 
-\image{\centering}{0.8}{drawing/I_5.pdf}
+\image{\centering}{0.8}{img/I_5.pdf}
 
 \begin{minted}{ocaml}
     let rec etape ll = match ll with
@@ -150,7 +150,7 @@ La complexité est $O(n+m)$
             |chr, lst_end -> chr::(decode arb lst_end) ;;
 \end{minted}
 
-\item \image{\raggedright}{0.45}{drawing/II_3.pdf}
+\item \image{\raggedright}{0.45}{img/II_3.pdf}
 
 \item \begin{minted}{ocaml}
     let to_huffman freq =
@@ -201,7 +201,7 @@ La complexité est $O(n+m)$
 choisi au hasard dans les indices inférieurs. Après avoir terminé la boucle \texttt{for}, le tableau a donc subit une permutation
 aléatoires.
 
-\item \image{\raggedright}{0.25}{drawing/III_3.pdf}
+\item \image{\raggedright}{0.25}{img/III_3.pdf}
 
 \item Soit $n \in \bb{N}$, le nombre d'éléments de l'abretas, on note $e_1, ..., e_n \in \bb{N}^2$ ces éléments.
 Montrons par récurrence forte sur $n$ l'unicité de l'arbretas. \\
@@ -219,7 +219,7 @@ D'où l'unicité.
 \end{minted}
 
 
-\item \image{\raggedright}{}{drawing/III_6.pdf}
+\item \image{\raggedright}{}{img/III_6.pdf}
 
 \item \begin{minted}{ocaml}
     let prio tree = match tree with
