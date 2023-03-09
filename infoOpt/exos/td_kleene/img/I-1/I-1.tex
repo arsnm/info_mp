@@ -13,19 +13,15 @@
     thick
   ]
     \node[state, initial, initial text = {}] (A) {$\{0, 2\}$};
-    \node[state] (B) [above right of=A] {$\{1\}$};
+    \node[state] (B) [accepting, above right of=A] {$\{1\}$};
     \node[state] (C) [accepting, below right of=A] {$\{0, 2, 3\}$};
 
     \path[->] (A) +(-1,0) edge (A)
               (A)         edge [bend left]  node {$a$} (B)
               (A)         edge [bend right] node {$b$} (C)
-              (B)         edge [bend left]  node {$a$} (D)
-              (B)         edge [bend right] node {$b$} (E)
-              (C)         edge              node {$a$} (E)
-              (C)         edge [bend right] node {$b$} (D)
-              (D)         edge              node {$a$} (B)
-              (D)         edge [bend right] node {$b$} (C)
-              (E)         edge [bend left]  node {$a$} (C)
-              (E)         edge [bend right] node {$b$} (B);
+              (B)         edge [loop above] node {$a$} (C)
+              (C)         edge [loop below] node {$b$} (C)
+              (C)         edge [bend left] node {$a$} (B)
+              (B)         edge [bend left] node {$b$} (C);
   \end{tikzpicture}
 \end{document}

@@ -91,7 +91,7 @@
 
 \section{Exercice CCP}
 \begin{enumerate}
-    \item 
+    \item \image{\centering}{0.25}{I-1/I-1.pdf}
 \end{enumerate}
 \section{Langage local, lin\'eaire, automate de Glushkov}
 \begin{enumerate}
@@ -102,6 +102,49 @@
         \item $F(L) = \{ab, ba, ca, bd, cd, bc, cc\}$
     \end{itemize}
     \image{\centering}{0.8}{II-1/II-1.pdf}
+\end{enumerate}
+
+\section{Stabilit\'e des langages rationnels}
+
+\begin{enumerate}
+    \item Non, $\underbrace{\varnothing}_{\text{rat.}} \subset \underbrace{\{a^nb^n \to n \in \bb{N} \}}_{\text{non-rat.}}$.
+    \item Non plus, $\underbrace{\{a^nb^n \to n \in \bb{N} \}}_{\text{non-rat.}} \subset \underbrace{\Sigma^*}_{\text{rat.}}$.
+    \item Oui, par définition d'un langage rationnel.
+    \item Non, $L = \{\text{palyndrome}\}$ non rat. mais $L^* = \Sigma^*$ est rationnel.
+    \item Oui, voir démonstration cours (inversé états finals et initiaux).
+    \item Oui, par récurrence et stabilité d'un langage par union.
+    \item Non, $\cup_{k \in \bb{N}} \underbrace{\{a^kb^k\}}_{\text{rat.}} = \underbrace{\{a^nb^n \to n \in \bb{N}\}}_{\text{non-rat.}}$.
+    \item Oui, car $\cap L_k =$ Complementaire $\cup$ complementaire $L_k$ (par 5 et 6).
+    \item Non, par l'absurde.
+\end{enumerate}
+
+\section{Calcul des ensembles $P(L)$, $S(L)$ et $F(L)$}
+
+\section{Reconnaissable $\implies$ rationnel avec le lemme d'Arden}
+
+\begin{enumerate}
+    \item 
+    \begin{itemize}
+        \item \underline{Analyse :}
+        \begin{align*}
+            L &= AL \cup B \\
+            &= A(AL \cup B) \cup B \\
+            &= A^2L \cup AB \cup B \\
+            &= A^kL \cup A^{k-1}B \cup ... AB \cup B \\
+            \forall k, \; L &= \cup_{i = 0}^{k - 1} (A^iB) \cup A^kL \\
+            &\forall i, \; A^iB \subset L
+         \end{align*}
+         Donc $A^*B \subset L$
+        \item Finir de recopier récurrence...
+    \end{itemize}
+    \item \begin{align}
+        L_0 = aL_1 \cup bL_0 \cup \varepsilon \\
+        L_1 = aL_2 \\
+        L_2 = \varepsilon \cup bL_0
+    \end{align}
+    Remplacer (2) dans (1): $L$ \\
+    Remplacer dans (3) : $L$ \\
+    Lemme d'Arden $\implies L_0 = (a^2b \cup b)^*(a^2 \cup \varepsilon)$
 \end{enumerate}
 
 
