@@ -1,0 +1,176 @@
+\documentclass{article}
+
+% packages
+\usepackage[french]{babel}
+\usepackage{caption}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{stmaryrd}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{lipsum}
+\usepackage{graphicx}
+\usepackage[ddmmyyyy]{datetime}
+\usepackage{adjustbox}
+\usepackage[a4paper, portrait, margin=20mm]{geometry} % define the page format
+\usepackage[explicit]{titlesec}
+\usepackage{color, soul}
+\setulcolor{red}
+
+%reference for the items of 'enumerate'
+\usepackage{enumitem, hyperref}
+\makeatletter
+\def\namedlabel#1#2{\begingroup
+    #2%
+    \def\@currentlabel{#2}%
+    \phantomsection\label{#1}\endgroup
+}
+\makeatother
+
+%personalized section style
+\titleformat{\section}
+{\Large\bfseries}
+{\thesection}{1em}{\ul{#1}}
+
+%counters
+\newcounter{exo}
+\setcounter{exo}{0}
+\newcommand{\exo}{%
+{\stepcounter{exo}{\Large\textbf{Exercice \arabic{exo}}%
+\newline}}}
+
+\newcounter{question}
+\setcounter{question}{0}
+\newcommand{\question}{%
+{\stepcounter{question}{\arabic{question}. \vspace{2mm}}}}
+
+\newcounter{subquestion}
+\setcounter{subquestion}{0}
+\newcommand{\subquestion}{%
+{\stepcounter{subquestion}{(\alph{subquestion})\vspace{2mm}}}}
+
+%code formatting
+\usepackage[cache=false, outputdir=.aux]{minted}
+\usemintedstyle{manni}
+
+%divers commands
+\newcommand{\bb}[1]{\mathbb{#1}}
+\newcommand{\encadrer}[1]{\fbox{color=red
+    \begin{minipage}{0.90\textwidth}
+        #1
+    \end{minipage}
+}}
+% \renewcommand{\thesection}{\Roman{section}} % Roman numerals for sections
+\setlength{\headheight}{12.5pt}
+
+\newcommand{\reset}[1]{\setcounter{#1}{0}}
+
+\graphicspath{ {./img/} } % define path to img 
+\newcommand{\image}[3]{ %command to insert image
+    \begin{minipage}[t]{\linewidth}
+        #1
+        \adjustbox{valign=t}{
+            \includegraphics[width=#2\linewidth]{#3}
+        }
+    \end{minipage}}
+
+%page numerotation
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[R]{\thepage/\pageref{LastPage}}
+
+%document info
+\makeatletter
+\title{Exercices Oral Centrale}
+\date{\today}
+\newcommand{\matiere}{Informatique}
+\newcommand{\classe}{MP\textsuperscript{*} }
+\author{Arsène MALLET}
+
+%header
+\fancypagestyle{firstpage}{
+    \fancyhead[L]{\@author}
+    \fancyhead[C]{\classe - \matiere}
+    \fancyhead[R]{\@date}
+}
+
+
+\begin{document}
+
+\thispagestyle{firstpage}
+
+\begin{center}
+    \huge\bfseries{\@title}
+\end{center}
+
+\exo
+
+\question Soit $A,\;B \in D_n$, $\lambda \in \bb{R}$, on a clairement que $A + \lambda B$ est de diagonale nulle, donc $A + \lambda B \in D_n$.
+On a clairement $D_n \subset E_n$, donc $D_n$ est un sous-espace vectoriel de $E$. La dimension de $D_n$ est $n(n - 1)$ et une base de $D_n$ est
+$(E_{i,j})_{i \neq j \in \llbracket 1, n \rrbracket^2}$.
+
+\question Soit $A,\;B \in T_n$, $\lambda \in \bb{R}$, on a clairement que $A + \lambda B$ est de trace nulle, donc $A + \lambda B \in T_n$.
+On a clairement $T_n \subset E_n$, donc $T_n$ est un sous-espace vectoriel de $E$. La dimension de $T_n$ est $n^2 - 1$ et une base est $(E_{i,j})_{i \neq j \in \llbracket 1, n \rrbracket} \cup (E_{i,i} - E_{n, n})_{i \in \llbracket 1, n - 1 \rrbracket}$
+
+\question \subquestion
+\begin{minted}[breaklines]{python}
+    def diag(n):
+        return np.diag(np.random.rand(n))
+\end{minted}
+
+\subquestion
+\begin{minted}[breaklines]{python}
+    def matrice(A, B):
+        return np.dot(A, B) - np.dot(B, A)
+\end{minted}
+
+\subquestion
+\begin{minted}[breaklines]{python}
+    n = 5
+    A = diag(n)
+    B = np.random.rand(n, n)
+    print(matrice(A, B))
+\end{minted}
+
+La matrice obtenue est une matrice de diagonale nulle.
+
+\reset{subquestion}
+
+\question Soit $A$ une matrice diagonale et $B \in \mathcal{M}_n(\bb{R})$, montrons que $AB -  BA \in D_n$
+Notons $A = \begin{pmatrix}
+    \lambda_1 &  & (0) \\
+     & \ddots &  \\
+    (0) &  & \lambda_n
+    \end{pmatrix}  $ et $B = (b_{i,j})$.
+    On a alors si $i \in \llbracket 1, b \rrbracket$, $(ab)_{i,j} = \lambda_i b_{i,i}$
+    De même, $(ba)_{i,i} = \lambda_i b_{i, i}$, d'où $(ab - ba)_{i, i} = 0$. Ainsi $AB - BA \in D_n$
+\question Montrons qu'il n'est pas possible d'avoir $Card(S_M) = 1$. En effet si $(A, B) \in S_M$, alors $(-B, A)$ et $(B, -A)$ appartiennent aussi à $S_M$
+Donc $|S_m = 1| \iff A = B = -A \iff A = B = (0)$ \textit{i.e.} or si $A = B = (0)$, $AB - BA = (0)$, or si $M = (0)$
+alors $S_M = \{(A, B) | AB = BA\} \neq \{0\}$. Ainsi il n'existe pas de $M$ tel que $|S_M| = 1$ \\
+
+\reset{question}
+
+\exo
+
+\question \begin{minted}[breaklines]{python}
+    univers = [-1, 1]
+
+    def temps(a, b):
+    n = -1
+    S_n = 0
+    while -a <= S_n <= b:
+        S_n += univers[np.random.randint(0, 2)]
+        n += 1
+    return n
+\end{minted}
+
+\question \begin{minted}[breaklines]{python3}
+    def moyenne(a, b):
+        return np.average(np.array([temps(5, 7) for _ in range(10000)]))
+    \end{minted}
+Après plusieurs exécutions, on obtient une moyenne fini, donc $T$ prend des valeurs finies.
+C'est en tous cas la conjecture que l'on peut faire.
+
+
+\end{document}
